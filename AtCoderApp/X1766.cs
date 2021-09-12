@@ -4,7 +4,7 @@
 public class AtCoder
 {
 
-    static void Main()
+    static void _Main()
     {
         //入力*
         string instr;
