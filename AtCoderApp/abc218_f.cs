@@ -18,101 +18,85 @@ namespace AtCoderApp
     {
         public abc218_f()
         {
+            //Set---
             var NM = Console.ReadLine().Split(' ');
             int N = Convert.ToInt32(NM[0]);
             int M = Convert.ToInt32(NM[1]);
 
-            var st = new List<int[]>();
+            var st = new int[M][];
             for (var i = 0; i < M; i++)
             {
                 var _st = Console.ReadLine().Split(' ');
-                st.Add(new int[] { Convert.ToInt32(_st[0]), Convert.ToInt32(_st[1]) });
+                st[i] = new int[2];
+                st[i][0] = Convert.ToInt32(_st[0]);
+                st[i][1] = Convert.ToInt32(_st[1]);
             }
 
-            //---
-            var XX = new Dictionary<int, List<int>>();// 1 to K min
-            var YY = new Dictionary<int, List<int>>();// K to N min
+            //Calc---
+            var ToN = CalcToN(st);
 
-            st.Select((p, index) => (p, index)).Where(q => q.p[0] == 1).ToList().ForEach(q =>
+            //結果出力---
+
+            //そもそもたどり着けない場合全部-1
+            if (ToN == null)
             {
-                XX.Add(q.p[1], new List<int> { q.index });
-            });
-
-            for (var i = 1; i < M; i++)
-            {
-                var nextXX = XX.Where(r => r.Value.Count() == i).ToList();
-
-                nextXX.ForEach(p =>
-                {
-                    st.Select((q, index) => (q, index)).Where(r => r.q[0] == p.Key).ToList().ForEach(s =>
-                    {
-                        if (!XX.ContainsKey(s.q[1]))
-                        {
-                            var indexAry = new List<int>();
-                            indexAry.AddRange(p.Value);
-                            indexAry.Add(s.index);
-                            XX.Add(s.q[1], indexAry);
-                        }
-                    });
-                });
-
-                if (XX.Count() == M - 1)
-                    break;
+                for (var i = 0; i < M; i++)
+                    Console.WriteLine(-1);
+                return;
             }
-
-
-            st.Select((p, index) => (p, index)).Where(q => q.p[1] == N).ToList().ForEach(q =>
-            {
-                YY.Add(q.p[0], new List<int> { q.index });
-            });
-
-            for (var i = 1; i < M; i++)
-            {
-                var nextYY = YY.Where(r => r.Value.Count() == i).ToList();
-
-                nextYY.ForEach(p =>
-                {
-                    st.Select((q, index) => (q, index)).Where(r => r.q[1] == p.Key).ToList().ForEach(s =>
-                    {
-                        if (!YY.ContainsKey(s.q[0]))
-                        {
-                            var indexAry = new List<int>();
-                            indexAry.AddRange(p.Value);
-                            indexAry.Add(s.index);
-                            YY.Add(s.q[0], indexAry);
-                        }
-                    });
-                });
-
-                if (YY.Count() == M - 1)
-                    break;
-            }
-
 
             for (var i = 0; i < M; i++)
             {
                 //最短ルート
-                var t = XX.Where(p => p.Key == N && !p.Value.Contains(i));
-                if (t.Count() > 0)
+                if (!ToN.Contains(i))
                 {
-                    Console.WriteLine(t.First().Value.Count());
+                    Console.WriteLine(ToN.Count());
                     continue;
                 }
 
-                //そのルートが使えない場合
-                //{1 to K} + {K to N}
-                int Ret = N + 1;
-                for (var j = 1; j < M; j++)
-                {
-                    XX.TryGetValue(j, out var cXX);
-                    YY.TryGetValue(j, out var cYY);
+                //最短ルートが使えない場合
+                var eraseST = st.Where((p,index) => index != i).ToArray();
+                var eraseToN = CalcToN(eraseST);
 
-                    if (cXX == null || cYY == null || cXX.Contains(i) || cYY.Contains(i))
-                        continue;
-                    Ret = Math.Min(Ret, cXX.Count() + cYY.Count());
+                Console.WriteLine(eraseToN == null ? -1 : eraseToN.Count());
+            }
+
+            //ローカル関数 1 to N minを計算
+            List<int> CalcToN(int[][] st)
+            {
+                var cToN = new Dictionary<int, List<int>>();
+
+                //1回目
+                foreach (var q in st.Select((p, index) => (p, index)).Where(q => q.p[0] == 1).ToList())
+                {
+                    if (q.p[1] == N) return new List<int>() { q.index };//でたら即終了
+
+                    cToN.Add(q.p[1], new List<int> { q.index });
+                };
+
+                //2～N回目
+                for (var i = 1; i < N; i++)
+                {
+                    var nextcToN = cToN.Where(r => r.Value.Count() == i).ToList();
+
+                    foreach (var p in nextcToN)
+                    {
+                        foreach (var s in st.Select((q, index) => (q, index)).Where(r => r.q[0] == p.Key).ToList())
+                        {
+                            if (!cToN.ContainsKey(s.q[1]))
+                            {
+                                var indexAry = new List<int>();
+                                indexAry.AddRange(p.Value);
+                                indexAry.Add(s.index);
+                                cToN.Add(s.q[1], indexAry);
+                                if (s.q[1] == N) break;//でたら即終了
+                            }
+                        };
+                    };
                 }
 
-                Console.WriteLine(Ret == N + 1 ? -1 : Ret);
+                var Ret = cToN.Where(p => p.Key == N);
+                return Ret.Count() == 0 ? null : Ret.First().Value;
             }
 
             return;
