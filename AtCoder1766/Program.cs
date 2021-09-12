@@ -25,41 +25,43 @@ public class AtCoder
 
         //[W,H] = [W-1,H] + [W,H-1]
 
-        result = Convert.ToString(calc_data(W, H) % 1000000007);
+        result = Convert.ToString(new Main_Calc().calc_data(W, H) % 1000000007);
 
         //出力*
         result = result + "\r\n";
         System.Console.WriteLine(result);
     }
 
-    public int[,] dataset = new int[100000, 100000];
-
-    public int calc_data(int i, int j)
+    public class Main_Calc
     {
+        public int[,] dataset = new int[100000, 100000];
 
-        int iresult;
-        if (this.dataset[i, j] != 0)
+        public int calc_data(int i, int j)
         {
-            return dataset[i, j];
-        }
-        if (dataset[j, i] != 0)
-        {
-            return dataset[j, i];
-        }
 
-        if (i == 2)
-        {
-            return j;
-        }
-        if (j == 2)
-        {
-            return i;
-        }
+            int iresult;
+            if (this.dataset[i, j] != 0)
+            {
+                return dataset[i, j];
+            }
+            if (dataset[j, i] != 0)
+            {
+                return dataset[j, i];
+            }
 
-        iresult = calc_data(i-1,j) + calc_data(i,j-1);
+            if (i == 2)
+            {
+                return j;
+            }
+            if (j == 2)
+            {
+                return i;
+            }
 
-        dataset[i, j] = iresult;
-        return iresult;
+            iresult = calc_data(i - 1, j) + calc_data(i, j - 1);
+
+            dataset[i, j] = iresult;
+            return iresult;
+        }
     }
-
 }
