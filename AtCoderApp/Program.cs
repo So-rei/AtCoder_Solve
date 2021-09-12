@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace AtCoderApp
 {
@@ -14,7 +15,9 @@ namespace AtCoderApp
     {        
         public AppMain()
         {
-            Console.WriteLine("Hello World!");
+            var N = Convert.ToInt32(Console.ReadLine());
+            Console.WriteLine();
+            return;
         }
     }
 }
