@@ -1,0 +1,6 @@
+C:\Users\So-rei4\Documents\Visual Studio 2012\Projects\_AtCoder\AtCoder1766\bin\Debug\AtCoder1766.exe.config
+C:\Users\So-rei4\Documents\Visual Studio 2012\Projects\_AtCoder\AtCoder1766\bin\Debug\AtCoder1766.exe
+C:\Users\So-rei4\Documents\Visual Studio 2012\Projects\_AtCoder\AtCoder1766\bin\Debug\AtCoder1766.pdb
+C:\Users\So-rei4\Documents\Visual Studio 2012\Projects\_AtCoder\AtCoder1766\obj\Debug\AtCoder1766.exe
+C:\Users\So-rei4\Documents\Visual Studio 2012\Projects\_AtCoder\AtCoder1766\obj\Debug\AtCoder1766.pdb
+C:\Users\So-rei4\Documents\Visual Studio 2012\Projects\_AtCoder\AtCoder1766\obj\Debug\AtCoder.csprojResolveAssemblyReference.cache

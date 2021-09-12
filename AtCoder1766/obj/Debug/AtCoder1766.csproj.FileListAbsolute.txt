@@ -1,0 +1,8 @@
+c:\users\so-rei4\documents\visual studio 2012\Projects\AtCoder1766\AtCoder1766\bin\Debug\AtCoder1766.exe.config
+c:\users\so-rei4\documents\visual studio 2012\Projects\AtCoder1766\AtCoder1766\bin\Debug\AtCoder1766.exe
+c:\users\so-rei4\documents\visual studio 2012\Projects\AtCoder1766\AtCoder1766\bin\Debug\AtCoder1766.pdb
+c:\users\so-rei4\documents\visual studio 2012\Projects\AtCoder1766\AtCoder1766\obj\Debug\AtCoder1766.exe
+c:\users\so-rei4\documents\visual studio 2012\Projects\AtCoder1766\AtCoder1766\obj\Debug\AtCoder1766.pdb
+C:\Users\So-rei4\Documents\Visual Studio 2012\Projects\_AtCoder\AtCoder1766\bin\Debug\AtCoder1766.exe.config
+C:\Users\So-rei4\Documents\Visual Studio 2012\Projects\_AtCoder\AtCoder1766\obj\Debug\AtCoder1766.exe
+C:\Users\So-rei4\Documents\Visual Studio 2012\Projects\_AtCoder\AtCoder1766\obj\Debug\AtCoder1766.pdb
