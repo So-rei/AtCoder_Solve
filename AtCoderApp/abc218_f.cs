@@ -27,9 +27,10 @@ namespace AtCoderApp
             for (var i = 0; i < M; i++)
             {
                 var _st = Console.ReadLine().Split(' ');
-                st[i] = new int[2];
-                st[i][0] = Convert.ToInt32(_st[0]);
-                st[i][1] = Convert.ToInt32(_st[1]);
+                st[i] = new int[3];
+                st[i][0] = i;//index
+                st[i][1] = Convert.ToInt32(_st[0]);
+                st[i][2] = Convert.ToInt32(_st[1]);
             }
 
             //Calc---
@@ -37,7 +38,7 @@ namespace AtCoderApp
 
             //結果出力---
 
-            //そもそもたどり着けない場合全部-1
+            //そもそもたどり着けない場合、全部-1で終了
             if (ToN == null)
             {
                 for (var i = 0; i < M; i++)
@@ -55,7 +56,7 @@ namespace AtCoderApp
                 }
 
                 //最短ルートが使えない場合
-                var eraseST = st.Where((p,index) => index != i).ToArray();
+                var eraseST = st.Where(p => p[0] != i).ToArray();
                 var eraseToN = CalcToN(eraseST);
 
                 Console.WriteLine(eraseToN == null ? -1 : eraseToN.Count());
@@ -67,11 +68,11 @@ namespace AtCoderApp
                 var cToN = new Dictionary<int, List<int>>();
 
                 //1回目
-                foreach (var q in st.Select((p, index) => (p, index)).Where(q => q.p[0] == 1).ToList())
+                foreach (var q in st.Where(r => r[1] == 1))
                 {
-                    if (q.p[1] == N) return new List<int>() { q.index };//でたら即終了
+                    if (q[2] == N) return new List<int>() { q[0] };//でたら即終了
 
-                    cToN.Add(q.p[1], new List<int> { q.index });
+                    cToN.Add(q[2], new List<int> { q[0] });
                 };
 
                 //2～N回目
@@ -81,22 +82,21 @@ namespace AtCoderApp
 
                     foreach (var p in nextcToN)
                     {
-                        foreach (var s in st.Select((q, index) => (q, index)).Where(r => r.q[0] == p.Key).ToList())
+                        foreach (var s in st.Where(r => r[1] == p.Key))
                         {
-                            if (!cToN.ContainsKey(s.q[1]))
+                            if (!cToN.ContainsKey(s[2]))
                             {
                                 var indexAry = new List<int>();
                                 indexAry.AddRange(p.Value);
-                                indexAry.Add(s.index);
-                                cToN.Add(s.q[1], indexAry);
-                                if (s.q[1] == N) break;//でたら即終了
+                                indexAry.Add(s[0]);
+                                if (s[2] == N) return indexAry;//でたら即終了
+                                cToN.Add(s[2], indexAry);
                             }
                         };
                     };
                 }
 
-                var Ret = cToN.Where(p => p.Key == N);
-                return Ret.Count() == 0 ? null : Ret.First().Value;
+                return null;
             }
 
             return;
