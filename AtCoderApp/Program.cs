@@ -8,15 +8,21 @@ namespace AtCoderApp
     {
         static void Main(string[] args)
         {
-            new arc217();
+            new arc218();
         }
+    }
 
-        public class arc217
+    public class arc218
+    {
+        public arc218()
         {
-            public arc217()
-            {
-                var n = In.ReadAry<int>();
-            }
+            //input-------------
+            var N = In.Read<long>();
+            var Ndigit = N.ToString().Length;
+
+
+            Out.Write("");
+
         }
     }
 
