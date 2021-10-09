@@ -4,17 +4,20 @@ using System.Linq;
 
 namespace AtCoderApp
 {
-    class Program
-    {
-        static void Main(string[] args)
-        {
-            new xxx();
-        }
-    }
+    //class Program
+    //{
+    //    static void Main(string[] args)
+    //    {
+    //        new abc222_d();
+    //    }
+    //}
 
-    public class xxx
+    //20211009
+    //例は正解だがほとんどWRやTLEになる...なにか抜けてる
+
+    public class abc222_d
     {
-        public xxx()
+        public abc222_d()
         {
             //input-------------
             var N = In.Read<int>();
@@ -64,18 +67,18 @@ namespace AtCoderApp
 
         }
     }
-}
 
-//Common Class--
-static class In
-{
-    public static T Read<T>() { var s = Console.ReadLine(); return (T)Convert.ChangeType(s, typeof(T)); }
-    public static IEnumerable<T> ReadAry<T>() { return Array.ConvertAll(Console.ReadLine().Split(' '), e => (T)Convert.ChangeType(e, typeof(T))); }
-    public static IEnumerable<T> ReadMany<T>(long n) { for (long i = 0; i < n; i++) yield return Read<T>(); }
-}
+    //Common Class--
+    //static class In
+    //{
+    //    public static T Read<T>() { var s = Console.ReadLine(); return (T)Convert.ChangeType(s, typeof(T)); }
+    //    public static IEnumerable<T> ReadAry<T>() { return Array.ConvertAll(Console.ReadLine().Split(' '), e => (T)Convert.ChangeType(e, typeof(T))); }
+    //    public static IEnumerable<T> ReadMany<T>(long n) { for (long i = 0; i < n; i++) yield return Read<T>(); }
+    //}
 
-static class Out
-{
-    public static void Write<T>(T item) => Console.WriteLine(item);
-    public static void WriteMany<T>(IEnumerable<T> items, string separetor = " ") => Write(string.Join(separetor, items));
+    //static class Out
+    //{
+    //    public static void Write<T>(T item) => Console.WriteLine(item);
+    //    public static void WriteMany<T>(IEnumerable<T> items, string separetor = " ") => Write(string.Join(separetor, items));
+    //}
 }
