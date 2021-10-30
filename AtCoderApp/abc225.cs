@@ -4,17 +4,123 @@ using System.Linq;
 
 namespace AtCoderApp
 {
-    class Program
+    //    class Program
+    //    {
+    //        static void Main(string[] args)
+    //        {
+    //            new abc225_a();
+    //        }
+    //    }
+
+    public class abc225_a
     {
-        static void Main(string[] args)
+        public abc225_a()
         {
-            new xxx();
+            //input-------------
+            var S = In.Read<string>();
+
+            //calc--------------
+            if (S[0] == S[1] && S[0] == S[2])
+                Out.Write(1);
+            else if (S[0] == S[1] || S[0] == S[2] || S[1] == S[2])
+                Out.Write(3);
+            else
+                Out.Write(6);
+        }
+    }
+    public class abc225_b
+    {
+        public abc225_b()
+        {
+            //input-------------
+            var N = In.Read<int>();
+            var ab = new (int a, int b)[N - 1];
+            for (int i = 0; i < N - 1; i++)
+            {
+                var _ab = In.ReadAry<int>().ToArray();
+                ab[i].a = _ab[0];
+                ab[i].b = _ab[1];
+            }
+
+            //calc--------------
+            int StarP = 0;
+
+            bool chk1 = ab[0].a == ab[1].a || ab[0].a == ab[1].b;
+            bool chk2 = ab[0].b == ab[1].a || ab[0].b == ab[1].b;
+            if (chk1 && chk2)
+            {
+                Out.Write("No");
+                return;
+            }
+
+            if (chk1)
+                StarP = ab[0].a;
+            else if (chk2)
+                StarP = ab[0].b;
+            else
+            {
+                Out.Write("No");
+                return;
+            }
+
+            for (int x = 2; x < N - 1; x++)
+            {
+                if (ab[x].a != StarP && ab[x].b != StarP)
+                {
+                    Out.Write("No");
+                    return;
+                }
+            }
+            Out.Write("Yes");
         }
     }
 
-    public class xxx
+    public class abc225_c
     {
-        public xxx()
+        public abc225_c()
+        {
+            //input-------------
+            var NM = In.ReadAry<int>().ToArray();
+            int N = NM[0];
+            int M = NM[1];
+
+            var B = new int[N][];
+            for (int i = 0; i < N; i++)
+            {
+                var _b = In.ReadAry<int>().ToArray();
+                B[i] = _b;
+            }
+
+            //calc--------------
+
+            //開始位置チェック(7列)
+            if ((B[0][0] % 7 == 0 && M > 1) ||
+                (B[0][0] % 7 + M > 8))
+            {
+                Out.Write("No");
+                return;
+            }
+
+            for (int i = 0; i < N; i++)
+            {
+                for (int j = 0; j < M; j++)
+                {
+                    if (B[0][0] + i * 7 + j != B[i][j])
+                    {
+                        Out.Write("No");
+                        return;
+                    }
+                }
+            }
+
+            Out.Write("Yes");
+        }
+    }
+
+    //TLE *12 OK*13
+    public class abc225_d
+    {
+        public abc225_d()
         {
             //input-------------
             var NQ = In.ReadAry<int>().ToArray();
@@ -107,18 +213,4 @@ namespace AtCoderApp
             }
         }
     }
-}
-
-//Common Class--
-static class In
-{
-    public static T Read<T>() { var s = Console.ReadLine(); return (T)Convert.ChangeType(s, typeof(T)); }
-    public static IEnumerable<T> ReadAry<T>() { return Array.ConvertAll(Console.ReadLine().Split(' '), e => (T)Convert.ChangeType(e, typeof(T))); }
-    public static IEnumerable<T> ReadMany<T>(long n) { for (long i = 0; i < n; i++) yield return Read<T>(); }
-}
-
-static class Out
-{
-    public static void Write<T>(T item) => Console.WriteLine(item);
-    public static void WriteMany<T>(IEnumerable<T> items, string separetor = " ") => Write(string.Join(separetor, items));
 }
