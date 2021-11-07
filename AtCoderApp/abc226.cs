@@ -80,6 +80,16 @@ namespace AtCoderApp
             }
 
             Out.Write(N - cnt);
+
+
+            //いやこんなんでいいのかよ！！
+            //var N = int.Parse(Console.ReadLine());
+            //var array = new string[N];
+            //for (int i = 0; i < N; i++)
+            //{
+            //    array[i] = Console.ReadLine();
+            //}
+            //Console.WriteLine(array.Distinct().Count());
         }
     }
     public class abc226_c
