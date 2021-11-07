@@ -95,24 +95,24 @@ namespace AtCoderApp
                 tka.Add(c);
             }
 
-            //TLE 3/15
-            //calc--------------
-            long ret = childs(N, new List<int>());
-            Out.Write(ret);
+            ////TLE 3/15
+            ////calc--------------
+            //long ret = childs(N, new List<int>());
+            //Out.Write(ret);
 
-            long childs(int Tx, List<int> iUsed)
-            {
-                long cnt = tka[Tx - 1][0];
-                for (int i = 2; i < 2 + tka[Tx - 1][1]; i++) //対応tkaを見て子供dp処理
-                {
-                    if (!iUsed.Contains(tka[Tx - 1][i]))
-                    {
-                        iUsed.Add(tka[Tx - 1][i]);
-                        cnt += childs(tka[Tx - 1][i], iUsed);
-                    }
-                }
-                return cnt;
-            }
+            //long childs(int Tx, List<int> iUsed)
+            //{
+            //    long cnt = tka[Tx - 1][0];
+            //    for (int i = 2; i < 2 + tka[Tx - 1][1]; i++) //対応tkaを見て子供dp処理
+            //    {
+            //        if (!iUsed.Contains(tka[Tx - 1][i]))
+            //        {
+            //            iUsed.Add(tka[Tx - 1][i]);
+            //            cnt += childs(tka[Tx - 1][i], iUsed);
+            //        }
+            //    }
+            //    return cnt;
+            //}
 
             //こっちでもTLE
             ////TLE 3/15
@@ -133,6 +133,27 @@ namespace AtCoderApp
             //    }
             //    yield break;
             //}
+
+            //これなら間に合う 配列最強
+            //calc--------------
+            var bUsed = new bool[N];
+            bUsed[N - 1] = true;
+            long ret = childs(N);
+            Out.Write(ret);
+
+            long childs(int Tx)
+            {
+                long cnt = tka[Tx - 1][0];
+                for (int i = 2; i < 2 + tka[Tx - 1][1]; i++) //対応tkaを見て子供dp処理
+                {
+                    if (!bUsed[tka[Tx - 1][i] - 1])
+                    {
+                        bUsed[tka[Tx - 1][i] - 1] = true;
+                        cnt += childs(tka[Tx - 1][i]);
+                    }
+                }
+                return cnt;
+            }
         }
     }
 }

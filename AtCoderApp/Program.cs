@@ -25,24 +25,7 @@ namespace AtCoderApp
                 tka.Add(c);
             }
 
-            //TLE 3/15
-            //calc--------------
-            var Chi = childs(N).Distinct();
-            long ret = tka[N - 1][0];
-            foreach (int i in Chi)
-                ret += tka[i - 1][0];
-            Out.Write(ret);
 
-            IEnumerable<int> childs(int Tx)
-            {
-                for (int i = 2; i < 2 + tka[Tx - 1][1]; i++) //対応tkaを見て子供dp処理
-                {
-                    yield return tka[Tx - 1][i];
-                    foreach (var c in childs(tka[Tx - 1][i]))
-                        yield return c;
-                }
-                yield break;
-            }
         }
     }
 }
