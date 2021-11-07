@@ -27,21 +27,21 @@ namespace AtCoderApp
 
             //TLE 3/15
             //calc--------------
-            long ret = childs(N, new List<int>());
+            var Chi = childs(N).Distinct();
+            long ret = tka[N - 1][0];
+            foreach (int i in Chi)
+                ret += tka[i - 1][0];
             Out.Write(ret);
 
-            long childs(int Tx, List<int> iUsed)
+            IEnumerable<int> childs(int Tx)
             {
-                long cnt = tka[Tx - 1][0];
                 for (int i = 2; i < 2 + tka[Tx - 1][1]; i++) //対応tkaを見て子供dp処理
                 {
-                    if (!iUsed.Contains(tka[Tx - 1][i]))
-                    {
-                        iUsed.Add(tka[Tx - 1][i]);
-                        cnt += childs(tka[Tx - 1][i], iUsed);
-                    }
+                    yield return tka[Tx - 1][i];
+                    foreach (var c in childs(tka[Tx - 1][i]))
+                        yield return c;
                 }
-                return cnt;
+                yield break;
             }
         }
     }
