@@ -8,49 +8,74 @@ namespace AtCoderApp
     {
         static void Main(string[] args)
         {
-            new xxx();
+            new abc227_c();
         }
     }
 
-    public class xxx
+    public class abc227_c
     {
-        public xxx()
+        public abc227_c()
         {
             //input-------------
-            var N = In.Read<int>();
-            var xy = new List<int[]>();
-            for (int i = 0; i < N; i++)
-            {
-                var c = In.ReadAry<int>().ToArray();
-                xy.Add(c);
-            }
+            var N = In.Read<long>();
 
             //output------------
-            var ptn = new List<string>(); //魔法の組み合わせ
-            for (int i = 0; i < N; i++)
+            ulong ret = 1;//1,1,1はかならずあるので1
+            var s = new List<string>();
+
+            //これだと当然TLE----------------------
+            for (int n = 2; n <= N; n++)
             {
-                for (int j = 0; j < N; j++)
+                for (long a = 1; a <= Math.Pow(N, 0.3333333333334); a++)
                 {
-                    if (i == j) continue;
-                    var cx = xy[i][0] - xy[j][0];
-                    var cy = xy[i][1] - xy[j][1];
-                    int gcd = Math.Abs(Gcd(cx, cy));//最大公約数 ※マイナスは＋にすることに注意
-                    ptn.Add((cx / gcd).ToString() + "," + (cy / gcd).ToString());
+                    if (a > n) break;
+                    for (long b = a; b <= Math.Sqrt(N); b++)
+                    {
+                        if (a * b > n) break;
+                        for (long c = b; c < N + 1; c++)
+                        {
+                            var sum = a * b * c;
+                            if (sum == n)
+                            {
+                                ret++;
+                                s.Add(a.ToString() + "," + b.ToString() + "," + c.ToString());
+                            }
+                            else if (sum > n)
+                                break;
+                        }
+                    }
                 }
             }
-            Out.Write(ptn.Distinct().Count());
+
+            Out.Write(ret);
+
+            //for (int n = 2; n < N; n++)
+            //{
+            //    var ptn = PrimeFactors(n);
+
+            //}
+
+            //static IEnumerable<int> PrimeFactors(int n)
+            //{
+            //    int i = 2;
+            //    int tmp = n;
+
+            //    while (i * i <= n) //※1
+            //    {
+            //        if (tmp % i == 0)
+            //        {
+            //            tmp /= i;
+            //            yield return i;
+            //        }
+            //        else
+            //        {
+            //            i++;
+            //        }
+            //    }
+            //    if (tmp != 1) yield return tmp;//最後の素数も返す
+            //}
         }
 
-        //最大公約数
-        public static int Gcd(int a, int b)
-        {
-            return a > b ? GcdRecursive(a, b) : GcdRecursive(b, a);
-        }
-
-        private static int GcdRecursive(int a, int b)
-        {
-            return b == 0 ? a : GcdRecursive(b, a % b);
-        }
     }
 }
 
