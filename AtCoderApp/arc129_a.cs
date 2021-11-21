@@ -4,20 +4,10 @@ using System.Linq;
 
 namespace AtCoderApp
 {
-    class Program
-    {
-        static void Main(string[] args)
-        {
-            new ac129_a();
-        }
-    }
 
-    //2021/11/21
-    //AC5 WA6 TLE7
-
-    public class ac129_a
+    public class ac129
     {
-        public ac129_a()
+        public ac129()
         {
             //input-------------
             var NLR = In.ReadAry<long>().ToArray();
@@ -49,7 +39,7 @@ namespace AtCoderApp
             //if (th1 <= R)
             //    cnt += Math.Min(th2 - 1, R) - th1 + 1;
 
-            //桁数ごとにループで数える
+            //桁数ごとにループで数える(AC)
             string Nstr = Convert.ToString(N, 2);
             int digit = Nstr.Count();
 
@@ -69,18 +59,4 @@ namespace AtCoderApp
 
     }
 
-}
-
-//Common Class--
-static class In
-{
-    public static T Read<T>() { var s = Console.ReadLine(); return (T)Convert.ChangeType(s, typeof(T)); }
-    public static IEnumerable<T> ReadAry<T>() { return Array.ConvertAll(Console.ReadLine().Split(' '), e => (T)Convert.ChangeType(e, typeof(T))); }
-    public static IEnumerable<T> ReadMany<T>(long n) { for (long i = 0; i < n; i++) yield return Read<T>(); }
-}
-
-static class Out
-{
-    public static void Write<T>(T item) => Console.WriteLine(item);
-    public static void WriteMany<T>(IEnumerable<T> items, string separetor = " ") => Write(string.Join(separetor, items));
 }
