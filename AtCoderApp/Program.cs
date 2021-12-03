@@ -8,65 +8,52 @@ namespace AtCoderApp
     {
         static void Main(string[] args)
         {
-            new ac129_a();
+            new abc230_dx();
         }
     }
 
-    //2021/11/21
-    //AC5 WA6 TLE7
-
-    public class ac129_a
+    public class abc230_dx
     {
-        public ac129_a()
+        public abc230_dx()
         {
             //input-------------
-            var NLR = In.ReadAry<long>().ToArray();
-            long N = NLR[0];
-            long L = NLR[1];
-            long R = NLR[2];
+            var ND = In.ReadAry<int>().ToArray();
+            var N = ND[0];
+            var D = ND[1];
+
+            var LR = new int[N][];
+            for (int i = 0; i < N; i++)
+            {
+                var _LR = In.ReadAry<int>().ToArray();
+                LR[i] = (new int[]{ _LR[0], _LR[1] });
+            }
 
             //output------------
-            long cnt = 0;
+            LR = LR.OrderBy(p => p[1]).ToArray();
 
-            //当然これだとTLEなので..
-            //for (long i = L; i <=R; i++)
-            //{
-            //    if ((i ^ N) < N)
-            //        cnt++;
-            //}
-
-            //これでもTLE、WAも出る（？）
-            //Nよりも多い桁数(2進)の値なら必ず条件を満たさないことを利用
-            //Nと同じ桁数は必ず条件を満たすことを利用
-            //int digit = Convert.ToString(N, 2).Count();
-            //long th1 = Convert.ToInt64(Math.Pow(2, digit - 1));
-            //long th2 = Convert.ToInt64(Math.Pow(2, digit));
-            //for (long i = L; i < Math.Min(th1, R); i++)
-            //{
-            //    if ((i ^ N) < N)
-            //        cnt++;
-            //}
-            //if (th1 <= R)
-            //    cnt += Math.Min(th2 - 1, R) - th1 + 1;
-
-            //桁数ごとにループで数える
-            string Nstr = Convert.ToString(N, 2);
-            int digit = Nstr.Count();
-
-            for (int d = 0; d < digit; d++)
+            int cnt = 0;
+            int right = 0;
+            for (int i = 0; i < N; i++)
             {
-                if (Nstr[digit - 1 - d] == '1') //下からd桁目が1なら,x=1000...1111(2^d個)は全部Nより小さくなる
+                if (right < LR[i][0]) //まだ殴られていない壁だったら
                 {
-                    long rMax = Math.Min(Convert.ToInt64(Math.Pow(2, d + 1)) - 1, R);
-                    long rMin = Math.Max(Convert.ToInt64(Math.Pow(2, d)), L);
-                    if (rMax >= rMin)
-                        cnt += rMax - rMin + 1;
+                    right = LR[i][1] + D - 1; //そこが左端にかかるように殴る
+                    cnt++;
                 }
             }
 
-            Out.Write(cnt);
-        }
+            //while (true)
+            //{
+            //    var point = LR.Min(p => p[1]) + D - 1; //一番左にある壁の右端を殴る
+            //    LR = LR.Where(p => p[0] > point).ToArray(); //壊れたやつは削除             
+            //    cnt++;
+            //    if (LR.Count() == 0) break;
+            //}
 
+            Out.Write(cnt);
+            
+            //-------------------------------
+        }
     }
 
 }
@@ -77,6 +64,7 @@ static class In
     public static T Read<T>() { var s = Console.ReadLine(); return (T)Convert.ChangeType(s, typeof(T)); }
     public static IEnumerable<T> ReadAry<T>() { return Array.ConvertAll(Console.ReadLine().Split(' '), e => (T)Convert.ChangeType(e, typeof(T))); }
     public static IEnumerable<T> ReadMany<T>(long n) { for (long i = 0; i < n; i++) yield return Read<T>(); }
+    public static IEnumerable<IEnumerable<T>> ReadManyAry<T>(long n) { for (long i = 0; i < n; i++) yield return ReadAry<T>(); }
 }
 
 static class Out
