@@ -204,26 +204,39 @@
 //        }
 //        bool SetConcat(List<int> ary0, List<int> ary1, int a, int b)
 //        {
-//            var _ary0 = ary0;
-//            var _ary1 = ary1;
-//            jo.Remove(ary0);
-//            jo.Remove(ary1);
-//            if ((_ary0[0] == a && _ary1.Last() == b) || (_ary0[0] == b && _ary1.Last() == a))
-//            {
-//                jo.Add(_ary1.Concat(_ary0).ToList());
-//                return true;
-//            }
-//            else if ((_ary1[0] == a && _ary0.Last() == b) || (_ary1[0] == b && _ary0.Last() == a))
-//            {
-//                jo.Add(_ary0.Concat(_ary1).ToList());
-//                return true;
-//            }
-//            else
-//            {
-//                //結合できない
-//                Out.Write("No");
-//                return false;
-//            }
+
+    //var _ary0 = ary0;
+    //var _ary1 = ary1;
+    //jo.Remove(ary0);
+    //jo.Remove(ary1);
+    //if (_ary0[0] == a && _ary1.Last() == b)
+    //{
+    //    jo.Add(_ary1.Concat(_ary0).ToList());
+    //    return true;
+    //}
+    //else if (_ary0.Last() == a && _ary1[0] == b)
+    //{
+    //    jo.Add(_ary0.Concat(_ary1).ToList());
+    //    return true;
+    //}
+    //else if (_ary0[0] == a && _ary1[0] == b)
+    //{
+    //    _ary0.Reverse();
+    //    jo.Add(_ary0.Concat(_ary1).ToList());
+    //    return true;
+    //}
+    //else if (_ary0.Last() == a && _ary1.Last() == b)
+    //{
+    //    _ary1.Reverse();
+    //    jo.Add(_ary0.Concat(_ary1).ToList());
+    //    return true;
+    //}
+    //else
+    //{
+    //    //結合できない
+    //    Out.Write("No");
+    //    return false;
+    //}
 //        }
 
 //    }
