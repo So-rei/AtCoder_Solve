@@ -14,46 +14,13 @@ namespace AtCoderApp
 
         public class xxx
         {
-            //TLE12 AC2
             public xxx()
             {
                 //input-------------
                 var NQ = In.ReadAry<int>().ToArray();
-                var N = NQ[0];
-                var Q = NQ[1];
-                var a = In.ReadAry<int>().ToArray();
-                var xk = new List<int[]>();
-                for (int i = 0; i < Q; i++)
-                {
-                    var _xk = In.ReadAry<int>().ToArray();
-                    xk.Add(new int[] { _xk[0], _xk[1] });
-                }
 
                 //calc--------------
-                ////aから先にリストを作成する
-                //var ans = new Dictionary<(int x, int k), int>(); //x,k,cnt
-                //for (int i = 0; i < N; i++)
-                //{
-                //    var cnt = ans.Count(p => p.Key.x == a[i]);
-                //    ans.Add((a[i], cnt + 1), i + 1);
-                //}
-
-                ////結果計算
-                //for (int i = 0; i < Q; i++)
-                //{
-                //    Out.Write(ans.ContainsKey((xk[i][0], xk[i][1])) ? ans[(xk[i][0], xk[i][1])] : -1);
-                //}
-
-
-                for (int i = 0; i < Q; i++)
-                {
-                    var col = a.Select((p, index) => (p, index)).Where(q => q.p == xk[i][0]);
-                    if (col.Count() < xk[i][1])
-                        Out.Write(-1);
-                    else
-                        Out.Write(col.ToList()[xk[i][1] - 1].index + 1);
-                }
-
+                Out.Write(-1);
             }
         }
 
@@ -89,7 +56,7 @@ namespace AtCoderApp
 
         //n個の数値オブジェクトの順列を返す(n!個)
         public static IEnumerable<IEnumerable<int>> Permutation(int max, int min = 1) { return Permutation<int>(Enumerable.Range(min, max).ToArray()); }
-        
+
         //n個のオブジェクトの順列を返す(n!個)
         public static IEnumerable<IEnumerable<T>> Permutation<T>(params T[] items) where T : IComparable
         {
