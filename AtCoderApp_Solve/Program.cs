@@ -9,43 +9,22 @@ namespace AtCoderApp
     {
         static void Main(string[] args)
         {
-            new arc133_c();
+            new abc236_e();
         }
 
-        public class arc133_c
+        public class abc236_e
         {
-            public arc133_c()
+            public abc236_e()
             {
                 //input-------------
-                var hwk = In.ReadAry<int>().ToArray();
-                (var H, var W, var K) = (hwk[0], hwk[1], hwk[2]);
-                var A = In.ReadAry<int>().ToArray();
-                var B = In.ReadAry<int>().ToArray();
+                var N = In.Read<int>();
+                var Ax = In.ReadAry<int>().ToArray();
 
                 //calc--------------
-                //タテヨコ全てK-1であったときが最大値であることは明らか
-                //その値から最小いくら減らせば条件を満たすかを考える
-                long aw = (K - 1) * W;//ヨコ1行全てがK-1だったとき、そのmod
-                long bh = (K - 1) * H;//タテ1列全てがK-1だったとき、そのmod
+                //とりあえずゴリ押し
+                long XOR_Max = 0;
+                Out.Write(XOR_Max);
 
-                long acheck = 0; //A条件をすべて満たすために最低限減らさないといけない量
-                for (int a = 0; a < H; a++)
-                {
-                    acheck += (long)(aw - A[a]) % K;
-                }
-                long bcheck = 0; //B条件をすべて満たすために最低限減らさないといけない量
-                for (int b = 0; b < W; b++)
-                {
-                    bcheck += (long)(bh - B[b]) % K;
-                }
-
-                if (acheck % K != bcheck % K)//A条件とB条件が噛み合わないときはエラー-1
-                    Out.Write(-1);
-                else
-                {
-                    long r = (long)((K - 1) * H * W) - Math.Max(acheck, bcheck);
-                    Out.Write(r);
-                }
             }
         }
 
