@@ -24,6 +24,9 @@
     <Compile Include="abc233_e.py" />
     <Compile Include="abc230_d.py" />
     <Compile Include="abc226_c.py" />
+    <Compile Include="abc238c.py">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in
