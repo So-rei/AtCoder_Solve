@@ -21,10 +21,14 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="abc233_e - Copy.py" />
     <Compile Include="abc233_e.py" />
     <Compile Include="abc230_d.py" />
     <Compile Include="abc226_c.py" />
     <Compile Include="abc238c.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="便利メモ.py">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>

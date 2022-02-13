@@ -9,21 +9,101 @@ namespace AtCoderApp
     {
         static void Main(string[] args)
         {
-            new abc236_e();
+            new arc135_b();
         }
 
-        public class abc236_e
+        public class arc135_b
         {
-            public abc236_e()
+            public arc135_b()
             {
                 //input-------------
                 var N = In.Read<int>();
-                var Ax = In.ReadAry<int>().ToArray();
+                var Sn = In.ReadAry<int>().ToArray();
 
                 //calc--------------
-                //とりあえずゴリ押し
-                long XOR_Max = 0;
-                Out.Write(XOR_Max);
+                if (N == 1)
+                {
+                    Out.Write("Yes");
+                    Out.Write("0 0 " + Sn[0].ToString());
+                    return;
+                }
+
+                var r = new int[N+2];
+                //条件確認
+                //s(n) < s(n+1) のとき、 A(n+3) >=  s(n+1) - s(n)
+                //逆も同様 A(n-1) >= s(n+1) - s(n)
+                for (int i = 0; i < N + 1; i++)
+                {
+                    var rR = 0;
+                    var rL = 0;
+
+                    if (i < N - 1 && Sn[i] > Sn[i + 1])
+                    {
+                        var sa = Sn[i] - Sn[i + 1];
+                        if (Sn[i] < sa || Sn[i + 1] < sa)
+                        {
+                            Out.Write("No");
+                            return;
+                        }
+                        rR = sa;
+                    }
+
+                    if (i >= 3 && Sn[i - 3] < Sn[i - 2])
+                    {
+                        var sa = Sn[i - 2] - Sn[i - 3];
+                        if (Sn[i - 2] < sa || Sn[i - 3] < sa)
+                        {
+                            Out.Write("No");
+                            return;
+                        }
+                        rL = sa;
+                    }
+
+                    //RL条件競合
+                    if ((i >= 3 && rR > rL && rR > Math.Min(Sn[i - 3], Sn[i - 2])) ||
+                        (i <= N - 1 && rR < rL && rL > Math.Min(Sn[i], Sn[i + 1])))
+                    {
+                        Out.Write("No");
+                        return;
+                    }
+                    r[i] = Math.Max(rR, rL);
+                }
+
+                //success
+                Out.Write("Yes");
+
+                var rr = SetMain(0, r);
+                Out.WriteMany(rr.ret);
+
+                //条件によって計算量が減らせるループ
+                (bool isOk, int[] ret) SetMain(int index, int[] joken)
+                {
+                    if (index >= N - 1)
+                    {
+                        joken[N] = Sn[index - 1] - joken[N - 1] - joken[N - 2];
+                        joken[N + 1] = Sn[index] - joken[N] - joken[N - 1];
+                        return (true, joken);//全部やったら終了
+                    }
+
+                    for (int i = joken[index]; i <= Sn[index] - joken[index] + joken[index + 1] + joken[index + 2]; i++)
+                    {
+                        if (index >= 2 && (joken[index - 2] + joken[index - 1] + i != Sn[index - 2]))//3つ目以降はサムチェック
+                            continue;
+
+                        var nj = new int[N + 2];
+                        for (var k = 0; k < joken.Length; k++)
+                        {
+                            nj[k] = joken[k];
+                        }
+
+                        nj[index] = i;
+                        var r = SetMain(index + 1, nj);
+                        if (r.isOk) return r;
+                    }
+
+                    return (false, null);
+                }
+
 
             }
         }
