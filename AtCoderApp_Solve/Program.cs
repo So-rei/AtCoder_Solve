@@ -9,102 +9,74 @@ namespace AtCoderApp
     {
         static void Main(string[] args)
         {
-            new arc135_b();
+            new abc239_e();
         }
 
-        public class arc135_b
+        public class abc239_e
         {
-            public arc135_b()
+            public abc239_e()
             {
                 //input-------------
-                var N = In.Read<int>();
-                var Sn = In.ReadAry<int>().ToArray();
+                var NQ = In.ReadAry<int>().ToArray();
+                (var N, var Q) = (NQ[0], NQ[1]);
+                var X = In.ReadAry<int>().ToArray();
+                var AB = new List<(int A, int B)>();
+                for (int i = 0; i < N-1; i++)
+                {
+                    var _ab = In.ReadAry<int>().ToArray();
+                    AB.Add((_ab.Min(), _ab.Max())); //そーとしておく
+                }
+                var VK = new List<(int V, int K)>();
+                for (int i = 0; i < Q; i++)
+                {
+                    var _vk = In.ReadAry<int>().ToArray();
+                    VK.Add((_vk[0], _vk[1]));
+                }
 
                 //calc--------------
-                if (N == 1)
+                var ABsort = AB.OrderBy(p => p.A).ToList(); //根がどっちかわからないということがおこらないようにする
+                var li = new Dictionary<int, List<int>>();
+                li.Add(1, new List<int>());
+                li[1].AddRange(Enumerable.Range(1, N));
+                for (int i = 2; i <= N; i++)
+                    li.Add(i, new List<int>());
+
+                //つながりのうち、根がどっちか側にあるかを考慮しないといけない
+                //確実に1とつながってる場所から始めることで計算量を最小にできるはず
+                foreach (var ab in ABsort.Where(p => p.A == 1))
+                    getChild(ab.B, 1);
+
+                for (int i = 0; i < Q; i++)
                 {
-                    Out.Write("Yes");
-                    Out.Write("0 0 " + Sn[0].ToString());
-                    return;
+                    var rr = li[VK[i].V].Distinct().Select(p => X[p - 1]).OrderByDescending(q => q).ToList(); //X取得・大きい方から
+                    Out.Write(rr[VK[i].K - 1]);
                 }
 
-                var r = new int[N+2];
-                //条件確認
-                //s(n) < s(n+1) のとき、 A(n+3) >=  s(n+1) - s(n)
-                //逆も同様 A(n-1) >= s(n+1) - s(n)
-                for (int i = 0; i < N + 1; i++)
+                //--------------------------------------------------------------------------------
+                //noの枝リスト取得
+                IEnumerable<int> getChild(int no, int Root) //Root:根とつながってる腕のno
                 {
-                    var rR = 0;
-                    var rL = 0;
+                    var r = new List<int>();
+                    r.AddRange(ABsort.Where(p => (p.A == no && p.B != Root)).Select(p => p.B));
+                    r.AddRange(ABsort.Where(p => (p.B == no && p.A != Root)).Select(p => p.A));
 
-                    if (i < N - 1 && Sn[i] > Sn[i + 1])
+                    if (r.Count() == 0) //子がいない
                     {
-                        var sa = Sn[i] - Sn[i + 1];
-                        if (Sn[i] < sa || Sn[i + 1] < sa)
-                        {
-                            Out.Write("No");
-                            return;
-                        }
-                        rR = sa;
+                        r.Add(no); //自身を追加
+                        li[no] = r; //保存
+                        return r;
                     }
+                    else//子がいるときはさらに子を取得..
+                    {
+                        var rc = new List<int>();
+                        foreach (var c in r)
+                            rc.AddRange(getChild(c, no));
 
-                    if (i >= 3 && Sn[i - 3] < Sn[i - 2])
-                    {
-                        var sa = Sn[i - 2] - Sn[i - 3];
-                        if (Sn[i - 2] < sa || Sn[i - 3] < sa)
-                        {
-                            Out.Write("No");
-                            return;
-                        }
-                        rL = sa;
+                        rc.Add(no); //自身を追加
+                        li[no] = rc; //保存
+                        return rc;
                     }
-
-                    //RL条件競合
-                    if ((i >= 3 && rR > rL && rR > Math.Min(Sn[i - 3], Sn[i - 2])) ||
-                        (i <= N - 1 && rR < rL && rL > Math.Min(Sn[i], Sn[i + 1])))
-                    {
-                        Out.Write("No");
-                        return;
-                    }
-                    r[i] = Math.Max(rR, rL);
                 }
-
-                //success
-                Out.Write("Yes");
-
-                var rr = SetMain(0, r);
-                Out.WriteMany(rr.ret);
-
-                //条件によって計算量が減らせるループ
-                (bool isOk, int[] ret) SetMain(int index, int[] joken)
-                {
-                    if (index >= N - 1)
-                    {
-                        joken[N] = Sn[index - 1] - joken[N - 1] - joken[N - 2];
-                        joken[N + 1] = Sn[index] - joken[N] - joken[N - 1];
-                        return (true, joken);//全部やったら終了
-                    }
-
-                    for (int i = joken[index]; i <= Sn[index] - joken[index] + joken[index + 1] + joken[index + 2]; i++)
-                    {
-                        if (index >= 2 && (joken[index - 2] + joken[index - 1] + i != Sn[index - 2]))//3つ目以降はサムチェック
-                            continue;
-
-                        var nj = new int[N + 2];
-                        for (var k = 0; k < joken.Length; k++)
-                        {
-                            nj[k] = joken[k];
-                        }
-
-                        nj[index] = i;
-                        var r = SetMain(index + 1, nj);
-                        if (r.isOk) return r;
-                    }
-
-                    return (false, null);
-                }
-
-
             }
         }
 
