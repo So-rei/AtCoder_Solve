@@ -5,7 +5,7 @@ from functools import lru_cache
 
 MOD = 998244353
  
-@lru_cache
+@lru_cache(maxsize=None)
 def f(X):
     if X <= 4:
         return X

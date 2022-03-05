@@ -9,74 +9,18 @@ namespace AtCoderApp
     {
         static void Main(string[] args)
         {
-            new abc239_e();
+            new abc242_c();
         }
 
-        public class abc239_e
+        public class abc242_c
         {
-            public abc239_e()
+            public abc242_c()
             {
                 //input-------------
-                var NQ = In.ReadAry<int>().ToArray();
-                (var N, var Q) = (NQ[0], NQ[1]);
-                var X = In.ReadAry<int>().ToArray();
-                var AB = new List<(int A, int B)>();
-                for (int i = 0; i < N-1; i++)
-                {
-                    var _ab = In.ReadAry<int>().ToArray();
-                    AB.Add((_ab.Min(), _ab.Max())); //そーとしておく
-                }
-                var VK = new List<(int V, int K)>();
-                for (int i = 0; i < Q; i++)
-                {
-                    var _vk = In.ReadAry<int>().ToArray();
-                    VK.Add((_vk[0], _vk[1]));
-                }
+                var N = In.Read<int>();
 
                 //calc--------------
-                var ABsort = AB.OrderBy(p => p.A).ToList(); //根がどっちかわからないということがおこらないようにする
-                var li = new Dictionary<int, List<int>>();
-                li.Add(1, new List<int>());
-                li[1].AddRange(Enumerable.Range(1, N));
-                for (int i = 2; i <= N; i++)
-                    li.Add(i, new List<int>());
-
-                //つながりのうち、根がどっちか側にあるかを考慮しないといけない
-                //確実に1とつながってる場所から始めることで計算量を最小にできるはず
-                foreach (var ab in ABsort.Where(p => p.A == 1))
-                    getChild(ab.B, 1);
-
-                for (int i = 0; i < Q; i++)
-                {
-                    var rr = li[VK[i].V].Distinct().Select(p => X[p - 1]).OrderByDescending(q => q).ToList(); //X取得・大きい方から
-                    Out.Write(rr[VK[i].K - 1]);
-                }
-
-                //--------------------------------------------------------------------------------
-                //noの枝リスト取得
-                IEnumerable<int> getChild(int no, int Root) //Root:根とつながってる腕のno
-                {
-                    var r = new List<int>();
-                    r.AddRange(ABsort.Where(p => (p.A == no && p.B != Root)).Select(p => p.B));
-                    r.AddRange(ABsort.Where(p => (p.B == no && p.A != Root)).Select(p => p.A));
-
-                    if (r.Count() == 0) //子がいない
-                    {
-                        r.Add(no); //自身を追加
-                        li[no] = r; //保存
-                        return r;
-                    }
-                    else//子がいるときはさらに子を取得..
-                    {
-                        var rc = new List<int>();
-                        foreach (var c in r)
-                            rc.AddRange(getChild(c, no));
-
-                        rc.Add(no); //自身を追加
-                        li[no] = rc; //保存
-                        return rc;
-                    }
-                }
+                Out.Write("");
             }
         }
 
