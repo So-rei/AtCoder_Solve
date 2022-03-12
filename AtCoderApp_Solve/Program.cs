@@ -9,18 +9,22 @@ namespace AtCoderApp
     {
         static void Main(string[] args)
         {
-            new abc242_c();
+            new abc243_d();
         }
 
-        public class abc242_c
+        public class abc243_d
         {
-            public abc242_c()
+            public abc243_d()
             {
                 //input-------------
-                var N = In.Read<int>();
+                var nx = In.ReadAry<int>().ToArray();
+                (var N, var X) = (nx[0],nx[1]);
+
+                var S = In.Read<string>();
 
                 //calc--------------
-                Out.Write("");
+
+
             }
         }
 
