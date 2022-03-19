@@ -9,25 +9,36 @@ namespace AtCoderApp
     {
         static void Main(string[] args)
         {
-            new abc243_d();
+            new arc137_b();
         }
 
-        public class abc243_d
+        public class arc137_b
         {
-            public abc243_d()
+            public arc137_b()
             {
                 //input-------------
-                var nx = In.ReadAry<int>().ToArray();
-                (var N, var X) = (nx[0],nx[1]);
-
-                var S = In.Read<string>();
+                var N = In.Read<int>();
+                var A = In.ReadAry<int>().ToArray();
 
                 //calc--------------
+                var li = new List<int>();
+                li.Add(A.Sum()); //部分列空の場合
 
-
+                //A(i)～A(i+j)のNC2通りを計算
+                for (int i = 0; i < N; i++)
+                {
+                    for (int j = 1; i + j <= N; j++)
+                    {
+                        int rest = A.Take(i).Sum() + A.Skip(i + j).Sum();
+                        int zerocnt = A.Skip(i).Take(j).Sum();
+                        int cnt1 = rest + (j - zerocnt);
+                        if (!li.Contains(cnt1))
+                            li.Add(cnt1);
+                    }
+                }
+                Out.Write(li.Count());
             }
         }
-
     }
 
 

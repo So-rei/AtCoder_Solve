@@ -1,4 +1,4 @@
-#f(x)の値を児童でメモしてくれるツール
+#f(x)の値を自動メモしてくれるツール
 #以下例
 
 from functools import lru_cache
