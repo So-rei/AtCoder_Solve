@@ -1,3 +1,4 @@
+
 #abc244_e
 #AC14 TLE15 RE9
 
@@ -39,3 +40,4 @@ def GetNext(s,cnt,xcnt,chr):
 ret = GetNext(S,0,0,str(S)) % MOD
 
 print(ret)
+

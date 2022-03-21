@@ -9,34 +9,38 @@ namespace AtCoderApp
     {
         static void Main(string[] args)
         {
-            new arc137_b();
+            new abc244_f();
         }
 
-        public class arc137_b
+        public class abc244_f
         {
-            public arc137_b()
+            public abc244_f()
             {
                 //input-------------
-                var N = In.Read<int>();
-                var A = In.ReadAry<int>().ToArray();
+                var nm = In.ReadAry<int>().ToArray();
+                (var N, var M) = (nm[0],nm[1]);
+                var UV = new List<(int U, int V)>();
+                for (int i = 0; i < M; i++)
+                {
+                    var uv = In.ReadAry<int>().ToArray();
+                    UV.Add((uv[0], uv[1]));
+                }
 
                 //calc--------------
-                var li = new List<int>();
-                li.Add(A.Sum()); //部分列空の場合
-
-                //A(i)～A(i+j)のNC2通りを計算
-                for (int i = 0; i < N; i++)
+                //0は必ず空列なので無視
+                for (int i = 1; i < Math.Pow(2,N) -1; i++)
                 {
-                    for (int j = 1; i + j <= N; j++)
+                    var S = Convert.ToString(i, 2).PadLeft(N,'0');
+                    for (int x = 0; x < N; x++)
                     {
-                        int rest = A.Take(i).Sum() + A.Skip(i + j).Sum();
-                        int zerocnt = A.Skip(i).Take(j).Sum();
-                        int cnt1 = rest + (j - zerocnt);
-                        if (!li.Contains(cnt1))
-                            li.Add(cnt1);
+                        if (S[x] == '1')
+                        {
+
+                        }
                     }
                 }
-                Out.Write(li.Count());
+
+
             }
         }
     }
