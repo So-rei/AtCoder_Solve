@@ -9,38 +9,83 @@ namespace AtCoderApp
     {
         static void Main(string[] args)
         {
-            new abc244_f();
+            new abc245_e();
         }
 
-        public class abc244_f
+        public class abc245_e
         {
-            public abc244_f()
+            public abc245_e()
             {
                 //input-------------
                 var nm = In.ReadAry<int>().ToArray();
-                (var N, var M) = (nm[0],nm[1]);
-                var UV = new List<(int U, int V)>();
-                for (int i = 0; i < M; i++)
-                {
-                    var uv = In.ReadAry<int>().ToArray();
-                    UV.Add((uv[0], uv[1]));
-                }
+                (var N, var M) = (nm[0], nm[1]);
+                var A = In.ReadAry<int>().ToArray();
+                var B = In.ReadAry<int>().ToArray();
+                var C = In.ReadAry<int>().ToArray();
+                var D = In.ReadAry<int>().ToArray();
 
                 //calc--------------
-                //0は必ず空列なので無視
-                for (int i = 1; i < Math.Pow(2,N) -1; i++)
-                {
-                    var S = Convert.ToString(i, 2).PadLeft(N,'0');
-                    for (int x = 0; x < N; x++)
-                    {
-                        if (S[x] == '1')
-                        {
 
-                        }
+                //無駄な面積最小=最善手　である
+                //大きいものから順になるべく小さい箱に入れていく
+                var AB = new List<(int A, int B)>();
+                var CD = new List<(int C, int D)>();
+
+                for (int i = 0; i < N; i++)
+                    AB.Add((A[i], B[i]));
+                for (int i = 0; i < M; i++)
+                    CD.Add((C[i], D[i]));
+
+                AB = AB.OrderByDescending(p => p.A).ThenByDescending(q => q.B).ToList();
+                CD = CD.OrderBy(p => p.C).ThenBy(q => q.D).ToList();
+
+                var nAB = new List<(int A, int B)>(AB);
+                var nCD = new List<(int C, int D)>(CD);
+
+                for (int i = 0; i < AB.Count(); i++)
+                {
+                    //ぴったりが最優先
+                    var rSame = CD.Where(p => AB[i].A == p.C && AB[i].B == p.D);
+                    if (rSame.Count() > 0)
+                    {
+                        nAB.Remove(AB[i]);
+                        nCD.Remove(rSame.First());
+                        continue;
+                    }
+                    //ただ1つしかない場合も優先
+                    var rOne = CD.Where(p => AB[i].A <= p.C && AB[i].B <= p.D);
+                    if (rOne.Count() == 1)
+                    {
+                        nAB.Remove(AB[i]);
+                        nCD.Remove(rOne.First());
+                        continue;
                     }
                 }
 
+                //残りパタン
+                var b = MainCalc(nCD,0);
+                if (b) Out.Write("Yes");
+                else Out.Write("No");
+                return;
 
+
+                bool MainCalc(List<(int C, int D)> cd, int r)
+                {
+                    for (int i = r; i < nAB.Count(); i++)
+                    {
+                        var bone = true;
+                        var box = cd.Where(p => nAB[i].A <= p.C && nAB[i].B <= p.D);
+                        if (box.Count() == 0) return false;
+
+                        foreach (var bx in box)
+                        {
+                            var ccd = cd.Where(p => p.C != bx.C && p.D != bx.D).ToList();
+                            bone = MainCalc(ccd, r+1);
+                            if (!bone) return false;
+                        }
+                    }
+                    return true;
+                }
             }
         }
     }
