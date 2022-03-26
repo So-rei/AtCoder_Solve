@@ -17,75 +17,9 @@ namespace AtCoderApp
             public abc245_e()
             {
                 //input-------------
-                var nm = In.ReadAry<int>().ToArray();
-                (var N, var M) = (nm[0], nm[1]);
-                var A = In.ReadAry<int>().ToArray();
-                var B = In.ReadAry<int>().ToArray();
-                var C = In.ReadAry<int>().ToArray();
-                var D = In.ReadAry<int>().ToArray();
-
-                //calc--------------
-
-                //無駄な面積最小=最善手　である
-                //大きいものから順になるべく小さい箱に入れていく
-                var AB = new List<(int A, int B)>();
-                var CD = new List<(int C, int D)>();
-
-                for (int i = 0; i < N; i++)
-                    AB.Add((A[i], B[i]));
-                for (int i = 0; i < M; i++)
-                    CD.Add((C[i], D[i]));
-
-                AB = AB.OrderByDescending(p => p.A).ThenByDescending(q => q.B).ToList();
-                CD = CD.OrderBy(p => p.C).ThenBy(q => q.D).ToList();
-
-                var nAB = new List<(int A, int B)>(AB);
-                var nCD = new List<(int C, int D)>(CD);
-
-                for (int i = 0; i < AB.Count(); i++)
-                {
-                    //ぴったりが最優先
-                    var rSame = CD.Where(p => AB[i].A == p.C && AB[i].B == p.D);
-                    if (rSame.Count() > 0)
-                    {
-                        nAB.Remove(AB[i]);
-                        nCD.Remove(rSame.First());
-                        continue;
-                    }
-                    //ただ1つしかない場合も優先
-                    var rOne = CD.Where(p => AB[i].A <= p.C && AB[i].B <= p.D);
-                    if (rOne.Count() == 1)
-                    {
-                        nAB.Remove(AB[i]);
-                        nCD.Remove(rOne.First());
-                        continue;
-                    }
-                }
-
-                //残りパタン
-                var b = MainCalc(nCD,0);
-                if (b) Out.Write("Yes");
-                else Out.Write("No");
-                return;
-
-
-                bool MainCalc(List<(int C, int D)> cd, int r)
-                {
-                    for (int i = r; i < nAB.Count(); i++)
-                    {
-                        var bone = true;
-                        var box = cd.Where(p => nAB[i].A <= p.C && nAB[i].B <= p.D);
-                        if (box.Count() == 0) return false;
-
-                        foreach (var bx in box)
-                        {
-                            var ccd = cd.Where(p => p.C != bx.C && p.D != bx.D).ToList();
-                            bone = MainCalc(ccd, r+1);
-                            if (!bone) return false;
-                        }
-                    }
-                    return true;
-                }
+                var K = In.ReadTuple3<int>();
+                (var X, var Y, var Z) = In.ReadTuple3<int>();
+                
             }
         }
     }
@@ -100,10 +34,17 @@ namespace AtCoderApp
         public static T Read<T>() { var s = Console.ReadLine(); return (T)Convert.ChangeType(s, typeof(T)); }
         //1行=>n個の配列値取得
         public static IEnumerable<T> ReadAry<T>() { return Array.ConvertAll(Console.ReadLine().Split(' '), e => (T)Convert.ChangeType(e, typeof(T))); }
-        //h行=>1個の値取得
-        public static IEnumerable<T> ReadMany<T>(long n) { for (long i = 0; i < n; i++) yield return Read<T>(); }
-        //h行=>n個の配列値取得
-        public static IEnumerable<IList<T>> ReadManyAry<T>(long n) { for (long i = 0; i < n; i++) yield return ReadAry<T>().ToArray(); }
+        //n行=>1個の値取得
+        public static IEnumerable<T> ReadMany<T>(long n) { var TT = new List<T>(); for (long i = 0; i < n; i++) TT.Add(Read<T>()); return TT; }
+        //n行=>*個の配列値取得
+        public static IEnumerable<T[]> ReadManyAry<T>(long n) { var TT = new List<T[]>(); for (long i = 0; i < n; i++) TT.Add(ReadAry<T>().ToArray()); return TT; }
+
+
+        //1行=>n個のタプル取得
+        public static (T, T) ReadTuple2<T>() { var c = ReadAry<T>().ToArray(); return (c[0], c[1]); }
+        public static (T, T, T) ReadTuple3<T>() { var c = ReadAry<T>().ToArray(); return (c[0], c[1], c[2]); }
+        public static (T, T, T, T) ReadTuple4<T>() { var c = ReadAry<T>().ToArray(); return (c[0], c[1], c[2], c[3]); }
+        public static (T, T, T, T, T) ReadTuple5<T>() { var c = ReadAry<T>().ToArray(); return (c[0], c[1], c[2], c[3], c[4]); }
     }
 
     static class Out
