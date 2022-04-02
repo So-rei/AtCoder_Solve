@@ -18,7 +18,7 @@ namespace AtCoderApp
             {
                 //input-------------
                 var N = In.Read<long>();
-                (var Ax , var Ay) = In.ReadTuple2<int>();
+                (var Ax, var Ay) = In.ReadTuple2<int>();
                 (var Bx, var By) = In.ReadTuple2<int>();
                 Ax--;
                 Ay--;
@@ -43,13 +43,16 @@ namespace AtCoderApp
                 //}    
 
                 var dp = new int[N, N];
+                var li = new List<(int x, int y)>(); //cnt回目の探索で見つかった点
+                li.Add((Ax, Ay)); //初期位置
+
                 for (int i = 0; i < N; i++)
                     for (int j = 0; j < N; j++)
                         dp[i, j] = (int)(N * N / 2) + 5;//最長手数は全マス数/2+1を超えることはない
 
-                var li = new List<(int x, int y)>(); //cnt回目の探索で見つかった点
-                li.Add((Ax, Ay)); //初期位置
+                //setdp(Ax, Ay, 0); 初回をここで書くのはダメ！　ループ内で見ないと、１回目で見つかった時正しく処理できない
 
+                //for (int cnt = 1; cnt < N * N / 2 + 5; cnt++) //最長手数は全マス数/2+1を超えることはない
                 for (int cnt = 0; cnt < N * N / 2 + 5; cnt++) //最長手数は全マス数/2+1を超えることはない
                 {
                     if (li.Count() == 0) break; //これ以上違う手がなければストップ
@@ -74,25 +77,33 @@ namespace AtCoderApp
                 {
                     for (int d = 1; d < Math.Min(N - x, N - y); d++)
                     {
-                        if (S[x + d][y + d] == '#' || dp[x + d, y + d] < cnt) break;
+                        if (S[x + d][y + d] == '#' || dp[x + d, y + d] < cnt + 1) break; //同じ場所は２回以上見ないようにする
                         dp[x + d, y + d] = cnt + 1;
+
+                        //<cntだとなぜかREになる
+                        //if (S[x + d][y + d] == '#' || dp[x + d, y + d] < cnt + 1) break; //同じ場所は２回以上見ないようにする
+                        //dp[x + d, y + d] = cnt + 1;
+                        //以下のようにMath.Maxだけだと遅い
+                        //if (S[x + d][y + d] == '#') break;
+                        //dp[x + d, y + d] = Math.Max(dp[x + d, y + d], cnt + 1);
+
                         li.Add((x + d, y + d));
                     }
                     for (int d = 1; d < Math.Min(x + 1, y + 1); d++)
                     {
-                        if (S[x - d][y - d] == '#' || dp[x - d, y - d] < cnt) break;
+                        if (S[x - d][y - d] == '#' || dp[x - d, y - d] < cnt + 1) break;
                         dp[x - d, y - d] = cnt + 1;
                         li.Add((x - d, y - d));
                     }
                     for (int d = 1; d < Math.Min(N - x, y + 1); d++)
                     {
-                        if (S[x + d][y - d] == '#' || dp[x + d, y - d] < cnt) break;
+                        if (S[x + d][y - d] == '#' || dp[x + d, y - d] < cnt + 1) break;
                         dp[x + d, y - d] = cnt + 1;
                         li.Add((x + d, y - d));
                     }
                     for (int d = 1; d < Math.Min(x + 1, N - y); d++)
                     {
-                        if (S[x - d][y + d] == '#' || dp[x - d, y + d] < cnt) break;
+                        if (S[x - d][y + d] == '#' || dp[x - d, y + d] < cnt + 1) break;
                         dp[x - d, y + d] = cnt + 1;
                         li.Add((x - d, y + d));
                     }
@@ -101,7 +112,8 @@ namespace AtCoderApp
                 }
             }
         }
-    }
+
+    }//End
 
 
 

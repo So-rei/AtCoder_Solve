@@ -154,7 +154,7 @@ namespace AtCoderApp
     }
 
     //時間切れのあと解いたやつ
-    //ほとんどあっているが、
+    //答えみずにACなったよ！
     public class abc246_e
     {
         public abc246_e()
@@ -193,8 +193,10 @@ namespace AtCoderApp
                 for (int j = 0; j < N; j++)
                     dp[i, j] = (int)(N * N / 2) + 5;//最長手数は全マス数/2+1を超えることはない
 
-            setdp(Ax, Ay, 0);
-            for (int cnt = 1; cnt < N * N / 2 + 5; cnt++) //最長手数は全マス数/2+1を超えることはない
+            //setdp(Ax, Ay, 0); 初回をここで書くのはダメ！　ループ内で見ないと、１回目で見つかった時正しく処理できない
+
+            //for (int cnt = 1; cnt < N * N / 2 + 5; cnt++) //最長手数は全マス数/2+1を超えることはない
+            for (int cnt = 0; cnt < N * N / 2 + 5; cnt++) //最長手数は全マス数/2+1を超えることはない
             {
                 if (li.Count() == 0) break; //これ以上違う手がなければストップ
 
@@ -218,25 +220,33 @@ namespace AtCoderApp
             {
                 for (int d = 1; d < Math.Min(N - x, N - y); d++)
                 {
-                    if (S[x + d][y + d] == '#' || dp[x + d, y + d] < cnt) break;
+                    if (S[x + d][y + d] == '#' || dp[x + d, y + d] < cnt + 1) break; //同じ場所は２回以上見ないようにする
                     dp[x + d, y + d] = cnt + 1;
+
+                    //<cntだとなぜかREになる
+                    //if (S[x + d][y + d] == '#' || dp[x + d, y + d] < cnt + 1) break; //同じ場所は２回以上見ないようにする
+                    //dp[x + d, y + d] = cnt + 1;
+                    //以下のようにMath.Maxだけだと遅くてTLEになる
+                    //if (S[x + d][y + d] == '#') break;
+                    //dp[x + d, y + d] = Math.Max(dp[x + d, y + d], cnt + 1);
+
                     li.Add((x + d, y + d));
                 }
                 for (int d = 1; d < Math.Min(x + 1, y + 1); d++)
                 {
-                    if (S[x - d][y - d] == '#' || dp[x - d, y - d] < cnt) break;
+                    if (S[x - d][y - d] == '#' || dp[x - d, y - d] < cnt + 1) break;
                     dp[x - d, y - d] = cnt + 1;
                     li.Add((x - d, y - d));
                 }
                 for (int d = 1; d < Math.Min(N - x, y + 1); d++)
                 {
-                    if (S[x + d][y - d] == '#' || dp[x + d, y - d] < cnt) break;
+                    if (S[x + d][y - d] == '#' || dp[x + d, y - d] < cnt + 1) break;
                     dp[x + d, y - d] = cnt + 1;
                     li.Add((x + d, y - d));
                 }
                 for (int d = 1; d < Math.Min(x + 1, N - y); d++)
                 {
-                    if (S[x - d][y + d] == '#' || dp[x - d, y + d] < cnt) break;
+                    if (S[x - d][y + d] == '#' || dp[x - d, y + d] < cnt + 1) break;
                     dp[x - d, y + d] = cnt + 1;
                     li.Add((x - d, y + d));
                 }
