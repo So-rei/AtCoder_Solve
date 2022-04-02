@@ -9,17 +9,96 @@ namespace AtCoderApp
     {
         static void Main(string[] args)
         {
-            new abc245_e();
+            new abc246_e();
         }
 
-        public class abc245_e
+        public class abc246_e
         {
-            public abc245_e()
+            public abc246_e()
             {
                 //input-------------
-                var K = In.ReadTuple3<int>();
-                (var X, var Y, var Z) = In.ReadTuple3<int>();
-                
+                var N = In.Read<long>();
+                (var Ax , var Ay) = In.ReadTuple2<int>();
+                (var Bx, var By) = In.ReadTuple2<int>();
+                Ax--;
+                Ay--;
+                Bx--;
+                By--;
+                var S = new string[N];
+                for (int i = 0; i < N; i++)
+                    S[i] = In.Read<string>();
+
+                //output------------
+
+                //NGパターン
+                if ((Math.Abs(Ax - Bx) - Math.Abs(Ay - By)) % 2 == 1) //ポーンの動き方的にいきようがない
+                {
+                    Out.Write(-1);
+                    return;
+                }
+                //if (S[Bx][By] == '#') //行き先にポーンがある
+                //{
+                //    Out.Write(-1);
+                //    return;
+                //}    
+
+                var dp = new int[N, N];
+                for (int i = 0; i < N; i++)
+                    for (int j = 0; j < N; j++)
+                        dp[i, j] = (int)(N * N / 2) + 5;//最長手数は全マス数/2+1を超えることはない
+
+                var li = new List<(int x, int y)>(); //cnt回目の探索で見つかった点
+                li.Add((Ax, Ay)); //初期位置
+
+                for (int cnt = 0; cnt < N * N / 2 + 5; cnt++) //最長手数は全マス数/2+1を超えることはない
+                {
+                    if (li.Count() == 0) break; //これ以上違う手がなければストップ
+
+                    var nli = new List<(int x, int y)>();
+                    foreach (var mem in li) nli.Add(mem);
+                    li.Clear();
+
+                    foreach (var mem in nli)
+                    {
+                        if (setdp(mem.x, mem.y, cnt))
+                        {
+                            Out.Write(cnt + 1);
+                            return;
+                        }
+                    }
+                }
+
+                Out.Write(-1);
+
+                bool setdp(int x, int y, int cnt)
+                {
+                    for (int d = 1; d < Math.Min(N - x, N - y); d++)
+                    {
+                        if (S[x + d][y + d] == '#' || dp[x + d, y + d] < cnt) break;
+                        dp[x + d, y + d] = cnt + 1;
+                        li.Add((x + d, y + d));
+                    }
+                    for (int d = 1; d < Math.Min(x + 1, y + 1); d++)
+                    {
+                        if (S[x - d][y - d] == '#' || dp[x - d, y - d] < cnt) break;
+                        dp[x - d, y - d] = cnt + 1;
+                        li.Add((x - d, y - d));
+                    }
+                    for (int d = 1; d < Math.Min(N - x, y + 1); d++)
+                    {
+                        if (S[x + d][y - d] == '#' || dp[x + d, y - d] < cnt) break;
+                        dp[x + d, y - d] = cnt + 1;
+                        li.Add((x + d, y - d));
+                    }
+                    for (int d = 1; d < Math.Min(x + 1, N - y); d++)
+                    {
+                        if (S[x - d][y + d] == '#' || dp[x - d, y + d] < cnt) break;
+                        dp[x - d, y + d] = cnt + 1;
+                        li.Add((x - d, y + d));
+                    }
+
+                    return dp[Bx, By] == cnt + 1;//Bについたかどうかを返す
+                }
             }
         }
     }
