@@ -9,107 +9,35 @@ namespace AtCoderApp
     {
         static void Main(string[] args)
         {
-            new abc246_e();
+            new abc246_d();
         }
 
-        public class abc246_e
+        public class abc246_d
         {
-            public abc246_e()
+            public abc246_d()
             {
                 //input-------------
                 var N = In.Read<long>();
-                (var Ax, var Ay) = In.ReadTuple2<int>();
-                (var Bx, var By) = In.ReadTuple2<int>();
-                Ax--;
-                Ay--;
-                Bx--;
-                By--;
-                var S = new string[N];
-                for (int i = 0; i < N; i++)
-                    S[i] = In.Read<string>();
 
                 //output------------
+                //(a^2+b^2)(a+b)
+                long F(long a, long b) => (a * a * a) + (a * a * b) + (a * b * b) + (b * b * b);
 
-                //NGパターン
-                if ((Math.Abs(Ax - Bx) - Math.Abs(Ay - By)) % 2 == 1) //ポーンの動き方的にいきようがない
+                long X = 100_0000_0000_0000_0000;
+                long b = 100_0000;
+                for (long a = 0; a <= 100_0000; a++) //条件よりmax=10^6なのは自明
                 {
-                    Out.Write(-1);
-                    return;
-                }
-                //if (S[Bx][By] == '#') //行き先にポーンがある
-                //{
-                //    Out.Write(-1);
-                //    return;
-                //}    
-
-                var dp = new int[N, N];
-                var li = new List<(int x, int y)>(); //cnt回目の探索で見つかった点
-                li.Add((Ax, Ay)); //初期位置
-
-                for (int i = 0; i < N; i++)
-                    for (int j = 0; j < N; j++)
-                        dp[i, j] = (int)(N * N / 2) + 5;//最長手数は全マス数/2+1を超えることはない
-
-                //setdp(Ax, Ay, 0); 初回をここで書くのはダメ！　ループ内で見ないと、１回目で見つかった時正しく処理できない
-
-                //for (int cnt = 1; cnt < N * N / 2 + 5; cnt++) //最長手数は全マス数/2+1を超えることはない
-                for (int cnt = 0; cnt < N * N / 2 + 5; cnt++) //最長手数は全マス数/2+1を超えることはない
-                {
-                    if (li.Count() == 0) break; //これ以上違う手がなければストップ
-
-                    var nli = new List<(int x, int y)>();
-                    foreach (var mem in li) nli.Add(mem);
-                    li.Clear();
-
-                    foreach (var mem in nli)
+                    while (b >= a)
                     {
-                        if (setdp(mem.x, mem.y, cnt))
-                        {
-                            Out.Write(cnt + 1);
-                            return;
-                        }
+                        var t = F(a, b);
+                        if (t < N) 
+                            break;
+
+                        X = Math.Min(X, t);
+                        b--;
                     }
                 }
-
-                Out.Write(-1);
-
-                bool setdp(int x, int y, int cnt)
-                {
-                    for (int d = 1; d < Math.Min(N - x, N - y); d++)
-                    {
-                        if (S[x + d][y + d] == '#' || dp[x + d, y + d] < cnt + 1) break; //同じ場所は２回以上見ないようにする
-                        dp[x + d, y + d] = cnt + 1;
-
-                        //<cntだとなぜかREになる
-                        //if (S[x + d][y + d] == '#' || dp[x + d, y + d] < cnt + 1) break; //同じ場所は２回以上見ないようにする
-                        //dp[x + d, y + d] = cnt + 1;
-                        //以下のようにMath.Maxだけだと遅い
-                        //if (S[x + d][y + d] == '#') break;
-                        //dp[x + d, y + d] = Math.Max(dp[x + d, y + d], cnt + 1);
-
-                        li.Add((x + d, y + d));
-                    }
-                    for (int d = 1; d < Math.Min(x + 1, y + 1); d++)
-                    {
-                        if (S[x - d][y - d] == '#' || dp[x - d, y - d] < cnt + 1) break;
-                        dp[x - d, y - d] = cnt + 1;
-                        li.Add((x - d, y - d));
-                    }
-                    for (int d = 1; d < Math.Min(N - x, y + 1); d++)
-                    {
-                        if (S[x + d][y - d] == '#' || dp[x + d, y - d] < cnt + 1) break;
-                        dp[x + d, y - d] = cnt + 1;
-                        li.Add((x + d, y - d));
-                    }
-                    for (int d = 1; d < Math.Min(x + 1, N - y); d++)
-                    {
-                        if (S[x - d][y + d] == '#' || dp[x - d, y + d] < cnt + 1) break;
-                        dp[x - d, y + d] = cnt + 1;
-                        li.Add((x - d, y + d));
-                    }
-
-                    return dp[Bx, By] == cnt + 1;//Bについたかどうかを返す
-                }
+                Out.Write(X);
             }
         }
 

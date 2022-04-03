@@ -153,6 +153,38 @@ namespace AtCoderApp
         }
     }
 
+    //解説を確認して作成のAC
+    public class abc246_d_2
+    {
+        public abc246_d_2()
+        {
+            //input-------------
+            var N = In.Read<long>();
+
+            //output------------
+            //(a^2+b^2)(a+b)
+            long F(long a, long b) => (a * a * a) + (a * a * b) + (a * b * b) + (b * b * b);
+
+            long X = 100_0000_0000_0000_0000;
+            long b = 100_0000;
+            for (long a = 0; a <= 100_0000; a++) //条件よりmax=10^6なのは自明
+            {
+                //bは1000000から始めて減らしていくようにしておくと、bを一方通行でへらすことが出来る
+                //(aを変えてもまた1000000から始める必要がない
+                while (b >= a)
+                {
+                    var t = F(a, b);
+                    if (t < N)
+                        break;
+
+                    X = Math.Min(X, t);
+                    b--;
+                }
+            }
+            Out.Write(X);
+        }
+    }
+
     //時間切れのあと解いたやつ
     //答えみずにACなったよ！
     public class abc246_e
