@@ -148,7 +148,86 @@ namespace AtCoderApp
             //    }
             //}
 
+            //解説を見て作ったら何故かWAになる。？？
+            foreach (var _ds in ds)
+            {
+                int cX = 0; int cY = 0; int j = 0;
+                for (int i = 0; i < _ds.Length; i++)
+                {
+                    while (j < _ds.Length && (cX == 0 || cY == 0))
+                    {
+                        if (_ds[j] == X) cX++;
+                        if (_ds[j] == Y) cY++;
+                        j++;
+                    }
+                    if (cX > 0 && cY > 0)
+                    {
+                        cnt += _ds.Length + 1 - j; //尺取法でここを短絡できる
+                    }
+                    if (_ds[i] == X) cX--;//尺の先頭の処理
+                    if (_ds[i] == Y) cY--;//〃
+                }
+            }
+
             Out.Write(cnt);
+        }
+        
+        //解説を写経したらなぜかWAになる。。？？？？
+        public class abc247_e_2
+        {
+            public abc247_e_2()
+            {
+                //input-------------
+                (var N, var X, var Y) = In.ReadTuple3<int>();
+                var A = In.ReadAry<int>().ToArray();
+
+                //output------------
+                //全部で(NC2 + N)通り
+                //ハズレ値でぶった切ったリストを作る
+                long cnt = 0; //答え
+                int i = 0;
+                while (i != N)
+                {
+                    var ds = new List<int>();
+                    while (i != N && A[i] <= X && A[i] >= Y)
+                    {
+                        ds.Add(A[i]);
+                        i++;
+                    }
+                    if (ds.Count() > 0)
+                        cnt += MainCalc(ds);
+                    else
+                        i++;
+                }
+
+                Out.Write(cnt);
+
+
+                long MainCalc(List<int> _ds)
+                {
+                    int res = 0;
+                    int i = 0; int j = 0;
+                    int cX = 0; int cY = 0;
+                    while (i != _ds.Count())
+                    {
+                        while (j != _ds.Count() && (cX == 0 || cY == 0))//j=i..
+                        {
+                            if (_ds[j] == X) cX++;
+                            if (_ds[j] == Y) cY++;
+                            j++;
+                        }
+                        if (cX > 0 && cY > 0)
+                        {
+                            res += _ds.Count() + 1 - j;
+                        }
+                        if (_ds[i] == X) cX--;
+                        if (_ds[i] == Y) cY--;
+                        i++;
+                    }
+
+                    return res;
+                }
+            }
         }
     }
 }

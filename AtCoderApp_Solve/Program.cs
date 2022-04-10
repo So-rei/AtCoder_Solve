@@ -23,45 +23,49 @@ namespace AtCoderApp
                 //output------------
                 //全部で(NC2 + N)通り
                 //ハズレ値でぶった切ったリストを作る
-                var ds = new List<int[]>();
-                int st = 0;
-                for (int i = 0; i < N; i++)
+                long cnt = 0; //答え
+                int i = 0;
+                while (i != N)
                 {
-                    if (A[i] > X || A[i] < Y) 
+                    var ds = new List<int>();
+                    while (i != N && A[i] <= X && A[i] >= Y)
                     {
-                        if (i - st != 0)
-                            ds.Add(A.Skip(st).Take(i - st).ToArray());
-                        
-                        st = i + 1;
+                        ds.Add(A[i]);
+                        i++;
                     }
-                }
-                if (N - st != 0)
-                    ds.Add(A.Skip(st).Take(N - st).ToArray());
-
-                var cnt = 0; //答え
-                foreach (var _ds in ds)
-                {
-                    var Ix = new List<int>();
-                    var Iy = new List<int>();
-                    for (int k = 0; k < _ds.Length; k++)
-                    {
-                        if (X == _ds[k]) Ix.Add(k);
-                        if (Y == _ds[k]) Iy.Add(k);
-                    }
-                    if (Ix.Count() == 0 || Iy.Count() == 0) continue; //条件満たさないものは無視
-
-                    //XリストとYリストが1つ以上含まれている範囲(L,R)を探す(indexだけ見ることで高速化)
-                    for (int i = 0; i <= Math.Min(Ix.Max(), Iy.Max()) && i < _ds.Length; i++)
-                    {
-                        for (int j = Math.Max(Ix.Min(),Iy.Min()); j < _ds.Length; j++) //j=i..
-                        {
-                            if (Ix.Exists(p => p >= i && p <= j) && Iy.Exists(q => q >= i && q <= j))
-                                cnt++;
-                        }
-                    }
+                    if (ds.Count() > 0)
+                        cnt += MainCalc(ds);
+                    else
+                        i++;
                 }
 
                 Out.Write(cnt);
+
+
+                long MainCalc(List<int> _ds)
+                {
+                    int res = 0;
+                    int i = 0; int j = 0;
+                    int cX = 0; int cY = 0;
+                    while (i != _ds.Count())
+                    {
+                        while (j != _ds.Count() && (cX == 0 || cY == 0))//j=i..
+                        {
+                            if (_ds[j] == X) cX++;
+                            if (_ds[j] == Y) cY++;
+                            j++;
+                        }
+                        if (cX > 0 && cY > 0)
+                        {
+                            res += _ds.Count() + 1 - j;
+                        }
+                        if (_ds[i] == X) cX--;
+                        if (_ds[i] == Y) cY--;
+                        i++;
+                    }
+
+                    return res;
+                }
             }
         }
 
