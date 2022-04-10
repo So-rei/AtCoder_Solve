@@ -129,3 +129,6 @@ def hoge(i,j,k):
 cLi = sorted(gsb, key = lambda x:(-x[0],-x[1],-x[2]))
 #c#じゃ絶対１行にするの無理そうな処理を１行にできる(ソート+イテレーターで取ってループ出力)
 [print(str(c[0]) + " " + str(c[1]) + " " + str(c[2])) for c in cLi]
+
+
+

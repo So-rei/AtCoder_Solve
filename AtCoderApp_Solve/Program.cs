@@ -9,35 +9,59 @@ namespace AtCoderApp
     {
         static void Main(string[] args)
         {
-            new abc246_d();
+            new abc247_e();
         }
 
-        public class abc246_d
+        public class abc247_e
         {
-            public abc246_d()
+            public abc247_e()
             {
                 //input-------------
-                var N = In.Read<long>();
+                (var N, var X, var Y) = In.ReadTuple3<int>();
+                var A = In.ReadAry<int>().ToArray();
 
                 //output------------
-                //(a^2+b^2)(a+b)
-                long F(long a, long b) => (a * a * a) + (a * a * b) + (a * b * b) + (b * b * b);
-
-                long X = 100_0000_0000_0000_0000;
-                long b = 100_0000;
-                for (long a = 0; a <= 100_0000; a++) //条件よりmax=10^6なのは自明
+                //全部で(NC2 + N)通り
+                //ハズレ値でぶった切ったリストを作る
+                var ds = new List<int[]>();
+                int st = 0;
+                for (int i = 0; i < N; i++)
                 {
-                    while (b >= a)
+                    if (A[i] > X || A[i] < Y) 
                     {
-                        var t = F(a, b);
-                        if (t < N) 
-                            break;
-
-                        X = Math.Min(X, t);
-                        b--;
+                        if (i - st != 0)
+                            ds.Add(A.Skip(st).Take(i - st).ToArray());
+                        
+                        st = i + 1;
                     }
                 }
-                Out.Write(X);
+                if (N - st != 0)
+                    ds.Add(A.Skip(st).Take(N - st).ToArray());
+
+                var cnt = 0; //答え
+                foreach (var _ds in ds)
+                {
+                    var Ix = new List<int>();
+                    var Iy = new List<int>();
+                    for (int k = 0; k < _ds.Length; k++)
+                    {
+                        if (X == _ds[k]) Ix.Add(k);
+                        if (Y == _ds[k]) Iy.Add(k);
+                    }
+                    if (Ix.Count() == 0 || Iy.Count() == 0) continue; //条件満たさないものは無視
+
+                    //XリストとYリストが1つ以上含まれている範囲(L,R)を探す(indexだけ見ることで高速化)
+                    for (int i = 0; i <= Math.Min(Ix.Max(), Iy.Max()) && i < _ds.Length; i++)
+                    {
+                        for (int j = Math.Max(Ix.Min(),Iy.Min()); j < _ds.Length; j++) //j=i..
+                        {
+                            if (Ix.Exists(p => p >= i && p <= j) && Iy.Exists(q => q >= i && q <= j))
+                                cnt++;
+                        }
+                    }
+                }
+
+                Out.Write(cnt);
             }
         }
 

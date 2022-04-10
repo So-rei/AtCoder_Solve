@@ -30,7 +30,19 @@
     <Compile Include="abc244_e.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="abc247_d.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="arc137_b.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="arc138_a.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="arc138_a_2.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="arc138_b.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="_SolveMain.py">

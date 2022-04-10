@@ -1,41 +1,32 @@
-#abc244_e
-#AC14 TLE15 RE9
 
-#input------------------
-(N,M,K,S,T,X) = [int(s) for s in input().rstrip().split(' ')]
+#abc247_d
 
-U = [0] * M
-V = [0] * M
-for i in range(M):
-    (U[i],V[i]) = [int(s) for s in input().rstrip().split(' ')]
+Q = int(input())
+qu = []
+for i in range(Q):
+    qu.append([int(s) for s in input().rstrip().split(' ')])
 
-MOD = 998244353
+#solve
+bolls = [] #x,c
+j = 0
+for i in range(Q):
+    if (qu[i][0] == 1): #’Ç‰Á
+        bolls.append([qu[i][1],qu[i][2]])
+    else:
+        c = qu[i][1]
+        sumx = 0
 
-#output-----------------
-uvx = [[] for _ in range(N+1)]
-for i in range(M):
-    uvx[U[i]].append(V[i])
-    uvx[V[i]].append(U[i])
+        #bolls‚©‚çˆø‚¢‚Ä‚¢‚­
+        while (c > 0):
+            if (bolls[j][1] <= c):
+                sumx += bolls[j][0] * bolls[j][1]
+                c -= bolls[j][1]
+                j += 1 #‚È‚­‚È‚Á‚½”z—ñ‚ðÁ‚³‚È‚¢
+            else:
+                sumx += bolls[j][0] * c
+                bolls[j][1] -= c
+                break
 
-def GetNext(s,cnt,xcnt,chr):
+        print(sumx)
 
-    #æœ€å¾Œ
-    if (cnt == K-1):
-        if (xcnt % 2 == 0):
-            for i in range(M):
-                if (T in uvx[s]):
-                    return 1
-        return 0
-    
-    #æœ€å¾Œä»¥å¤–
-    r = 0
-    for c in uvx[s]:
-        xx = 0
-        if (c==X):
-           xx = 1
-        r += GetNext(c,cnt+1,xcnt+xx,str(chr) + str(c)) % MOD
-    return r
-
-ret = GetNext(S,0,0,str(S)) % MOD
-
-print(ret)
+exit()
