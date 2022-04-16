@@ -33,6 +33,9 @@
     <Compile Include="abc247_d.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="abc248_c.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="arc137_b.py">
       <SubType>Code</SubType>
     </Compile>
