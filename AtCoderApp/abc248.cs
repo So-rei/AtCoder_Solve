@@ -161,9 +161,10 @@ namespace AtCoderApp
             int cnt = 0;//結果
             var used = new List<List<int>>();
 
+            //N*(N-1)/2の組み合わせ
             for (int i = 0; i < N; i++)
             {
-                for (int j = 0; j < N; j++)
+                for (int j = i+1; j < N; j++) 
                 {
                     if (i == j) continue;
                     if (used.Exists(p => p.Contains(i) && p.Contains(j))) continue; //チェック済の直線
