@@ -79,6 +79,7 @@ namespace AtCoderApp
         public static (T, T, T) ReadTuple3<T>() { var c = ReadAry<T>().ToArray(); return (c[0], c[1], c[2]); }
         public static (T, T, T, T) ReadTuple4<T>() { var c = ReadAry<T>().ToArray(); return (c[0], c[1], c[2], c[3]); }
         public static (T, T, T, T, T) ReadTuple5<T>() { var c = ReadAry<T>().ToArray(); return (c[0], c[1], c[2], c[3], c[4]); }
+        public static (T, T, T, T, T, T) ReadTuple6<T>() { var c = ReadAry<T>().ToArray(); return (c[0], c[1], c[2], c[3], c[4], c[5]); }
     }
 
     static class Out

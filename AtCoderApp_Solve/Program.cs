@@ -9,62 +9,97 @@ namespace AtCoderApp
     {
         static void Main(string[] args)
         {
-            new abc247_e();
+            new arc139_b();
         }
 
-        public class abc247_e
+        public class arc139_b
         {
-            public abc247_e()
+            public arc139_b()
             {
                 //input-------------
-                (var N, var X, var Y) = In.ReadTuple3<int>();
-                var A = In.ReadAry<int>().ToArray();
+                var T = In.Read<int>();
+                var C = new (long N, long A, long B, long X, long Y, long Z)[T];
+                for (int i = 0; i < T; i++)
+                    (C[i].N, C[i].A, C[i].B, C[i].X, C[i].Y, C[i].Z) = In.ReadTuple6<int>();
 
                 //output------------
-                //全部で(NC2 + N)通り
-                //ハズレ値でぶった切ったリストを作る
-                long cnt = 0; //答え
-                int i = 0;
-                while (i != N)
+                for (int i = 0; i < T; i++)
                 {
-                    var ds = new List<int>();
-                    while (i != N && A[i] <= X && A[i] >= Y)
+                    var Xy = C[i].X * C[i].A <= C[i].Y;
+                    var Xz = C[i].X * C[i].B <= C[i].Z;
+
+
+                    if (Xy || Xz)
                     {
-                        ds.Add(A[i]);
-                        i++;
+                        //Xが最も一番効率いいなら即終了
+                        if (Xy && Xz)
+                        {
+                            Out.Write(C[i].X * C[i].N);
+                            continue;
+                        }
+                        //Y>Z>XまたはZ>Y>Xの場合も即終了
+                        else if (Xy)
+                        {
+                            long cn = (C[i].N - C[i].N % C[i].B) / C[i].B;
+                            Out.Write(cn * C[i].Z + (C[i].N - cn * C[i].B) * C[i].X);
+                            continue;
+                        }
+                        else if (Xz)
+                        {
+                            long cn = (C[i].N - C[i].N % C[i].A) / C[i].A;
+                            Out.Write(cn * C[i].Y + (C[i].N - cn * C[i].A) * C[i].X);
+                            continue;
+                        }
                     }
-                    if (ds.Count() > 0)
-                        cnt += MainCalc(ds);
+                    
+                    //それ以外の時、一番効率いいやつ詰める
+                    if ((double)C[i].A / (double)C[i].Y > (double)C[i].B / (double)C[i].Z)
+                        //X>Y>Z
+                        Out.Write(SetKn(C[i]));
                     else
-                        i++;
+                    {
+                        //Y>X>Z
+                        long ab = C[i].B;
+                        C[i].B = C[i].A;
+                        C[i].A = ab;
+                        long yz = C[i].Y;
+                        C[i].Y = C[i].Z;
+                        C[i].Z = yz;
+                        Out.Write(SetKn(C[i]));
+                    }
                 }
 
-                Out.Write(cnt);
-
-
-                long MainCalc(List<int> _ds)
+                //a/y -> b/zの場合---------
+                //ex)N=12のとき、5,5,1,1 より 5,3,3,1の方がいい可能性がある
+                //この処理のため、途中からナップザックする
+                //効率が良い方=a/y
+                long SetKn((long n, long a, long b, long x, long y, long z) C)
                 {
-                    int res = 0;
-                    int i = 0; int j = 0;
-                    int cX = 0; int cY = 0;
-                    while (i != _ds.Count())
+                    long cnt = Math.Max(0,((C.n - C.n % C.a) / C.a) - Gcd(C.a,C.b) / C.a);
+
+                    var kn = new long[C.n+1];
+                    kn[cnt * C.a] = cnt * C.y;
+
+                    for (var i = cnt * C.a + 1; i <= C.n; i++)
                     {
-                        while (j != _ds.Count() && (cX == 0 || cY == 0))//j=i..
-                        {
-                            if (_ds[j] == X) cX++;
-                            if (_ds[j] == Y) cY++;
-                            j++;
-                        }
-                        if (cX > 0 && cY > 0)
-                        {
-                            res += _ds.Count() + 1 - j;
-                        }
-                        if (_ds[i] == X) cX--;
-                        if (_ds[i] == Y) cY--;
-                        i++;
+                        var kmin = kn[i - 1] + C.x;
+                        if (i - C.a >= cnt * C.a) kmin = Math.Min(kmin, kn[i - C.a] + C.y);
+                        if (i - C.b >= cnt * C.a) kmin = Math.Min(kmin, kn[i - C.b] + C.z);
+                        kn[i] = kmin;
                     }
 
-                    return res;
+                    return kn[C.n];
+                }
+
+                //gcd
+                static long Gcd(long a, long b)
+                {
+                    return a > b ? GcdRecursive(a, b) : GcdRecursive(b, a);
+                }
+
+                static long GcdRecursive(long a, long b)
+                {
+                    return b == 0 ? a : GcdRecursive(b, a % b);
                 }
             }
         }
@@ -92,6 +127,7 @@ namespace AtCoderApp
         public static (T, T, T) ReadTuple3<T>() { var c = ReadAry<T>().ToArray(); return (c[0], c[1], c[2]); }
         public static (T, T, T, T) ReadTuple4<T>() { var c = ReadAry<T>().ToArray(); return (c[0], c[1], c[2], c[3]); }
         public static (T, T, T, T, T) ReadTuple5<T>() { var c = ReadAry<T>().ToArray(); return (c[0], c[1], c[2], c[3], c[4]); }
+        public static (T, T, T, T, T,T) ReadTuple6<T>() { var c = ReadAry<T>().ToArray(); return (c[0], c[1], c[2], c[3], c[4],c[5]); }
     }
 
     static class Out
@@ -104,6 +140,17 @@ namespace AtCoderApp
 
     public static class Algo
     {
+        //gcd（最大公約数）を取得
+        public static long Gcd(long a, long b)
+        {
+            return a > b ? GcdRecursive(a, b) : GcdRecursive(b, a);
+        }
+
+        private static long GcdRecursive(long a, long b)
+        {
+            return b == 0 ? a : GcdRecursive(b, a % b);
+        }
+
         //Permutation(順列)計算 解はn!通りある
 
         //n個の数値オブジェクトの順列を返す(n!個)
