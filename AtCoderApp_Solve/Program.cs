@@ -9,15 +9,16 @@ namespace AtCoderApp
     {
         static void Main(string[] args)
         {
-            new abc250_d();
+            new abc254_d();
         }
 
-        public class abc250_d
+        public class abc254_d
         {
-            public abc250_d()
+            public abc254_d()
             {
                 //input-------------
-                var r = Algo.PrimeList(200, -1).ToArray();
+                var N = In.Read<int>();
+
                 //output------------
             }
         }
@@ -45,7 +46,7 @@ namespace AtCoderApp
         public static (T, T, T) ReadTuple3<T>() { var c = ReadAry<T>().ToArray(); return (c[0], c[1], c[2]); }
         public static (T, T, T, T) ReadTuple4<T>() { var c = ReadAry<T>().ToArray(); return (c[0], c[1], c[2], c[3]); }
         public static (T, T, T, T, T) ReadTuple5<T>() { var c = ReadAry<T>().ToArray(); return (c[0], c[1], c[2], c[3], c[4]); }
-        public static (T, T, T, T, T,T) ReadTuple6<T>() { var c = ReadAry<T>().ToArray(); return (c[0], c[1], c[2], c[3], c[4],c[5]); }
+        public static (T, T, T, T, T, T) ReadTuple6<T>() { var c = ReadAry<T>().ToArray(); return (c[0], c[1], c[2], c[3], c[4], c[5]); }
     }
 
     static class Out
@@ -58,23 +59,41 @@ namespace AtCoderApp
 
     public static class Algo
     {
-        //gcd（最大公約数）を取得
+        /// <summary>
+        /// aとbのgcd（最大公約数）を取得
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
         public static long Gcd(long a, long b)
         {
             return a > b ? GcdRecursive(a, b) : GcdRecursive(b, a);
         }
 
+        //gcd処理内部用
         private static long GcdRecursive(long a, long b)
         {
             return b == 0 ? a : GcdRecursive(b, a % b);
         }
 
-        //Permutation(順列)計算 解はn!通りある
-
-        //n個の数値オブジェクトの順列を返す(n!個)
+        /// <summary>
+        /// n個のPermutation(順列)計算 数値用
+        /// (n!通りのint[]が返却される)
+        /// </summary>
+        /// <param name="max"></param>
+        /// <param name="min"></param>
+        /// <returns></returns>
         public static IEnumerable<IEnumerable<int>> Permutation(int max, int min = 1) { return Permutation<int>(Enumerable.Range(min, max).ToArray()); }
 
-        //n個のオブジェクトの順列を返す(n!個)
+        /// <summary>
+        /// n個のPermutation(順列)計算 オブジェクト用
+        /// n個のオブジェクトの順列を返す
+        /// (n!個のT[]が返却される)
+        /// 公開用バージョン
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="array"></param>
+        /// <returns></returns>
         public static IEnumerable<IEnumerable<T>> Permutation<T>(params T[] items) where T : IComparable
         {
             int cnt = items.Count();
@@ -116,7 +135,8 @@ namespace AtCoderApp
             }
         }
 
-
+        // n個のオブジェクトの順列を返す(n!個のT[]が返却される)
+        // 内部処理用　nが小さい時使用
         private static IEnumerable<T[]> Permutation_Single<T>(params T[] array) where T : IComparable
         {
             var a = new List<T>(array).ToArray();
@@ -158,8 +178,14 @@ namespace AtCoderApp
             return res;
         }
 
-        //nCr列挙
-        //ex)4C2 = (0,1)(0,2)(0,3)(1,2)(1,3)(2,3)
+        /// <summary>
+        /// nCr列挙
+        /// ex)4C2 = (0,1)(0,2)(0,3)(1,2)(1,3)(2,3)
+        /// </summary>
+        /// <param name="n"></param>
+        /// <param name="r"></param>
+        /// <param name="st">開始位置 0以外が入るのは内部処理中のみ</param>
+        /// <returns></returns>
         public static IEnumerable<List<int>> Combination(int n, int r, int st = 0)
         {
 
@@ -188,7 +214,11 @@ namespace AtCoderApp
             }
         }
 
-        //素数かどうかチェックする
+        /// <summary>
+        /// 素数かどうかチェックする
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
         public static bool IsPrime(long value)
         {
             // 1や0、負数は素数ではない
@@ -217,14 +247,18 @@ namespace AtCoderApp
             return true;
         }
 
-        //素数リストを出力する
-        //max何個まで、maxいくつまで　の指定可
-        public static IEnumerable<int> PrimeList(int cnt = -1, int max = -1) 
+        /// <summary>
+        /// 素数リストを出力する
+        /// </summary>
+        /// <param name="cnt">max何個まで</param>
+        /// <param name="max">maxいくつまで</param>
+        /// <returns></returns>
+        public static IEnumerable<int> PrimeList(int cnt = -1, int max = -1)
         {
             //1000までは高速に出す
-            var s = "2 3 5 7 11 13 17 19 23 29 31 37 41 43 47 53 59 61 67 71 73 79 83 89 97 "+
-                    "101 103 107 109 113 127 131 137 139 149 151 157 163 167 173 179 181 191 193 197 199 "+
-                    "211 223 227 229 233 239 241 251 257 263 269 271 277 281 283 293 "+
+            var s = "2 3 5 7 11 13 17 19 23 29 31 37 41 43 47 53 59 61 67 71 73 79 83 89 97 " +
+                    "101 103 107 109 113 127 131 137 139 149 151 157 163 167 173 179 181 191 193 197 199 " +
+                    "211 223 227 229 233 239 241 251 257 263 269 271 277 281 283 293 " +
                     "307 311 313 317 331 337 347 349 353 359 367 373 379 383 389 397 " +
                     "401 409 419 421 431 433 439 443 449 457 461 463 467 479 487 491 499 " +
                     "503 509 521 523 541 547 557 563 569 571 577 587 593 599 " +
@@ -268,6 +302,31 @@ namespace AtCoderApp
                         yield return i;
                 }
             }
+        }
+
+        /// <summary>
+        /// 素因数分解
+        /// </summary>
+        /// <param name="n">分解する数</param>
+        /// <returns>イテレータで返す</returns>
+        public static IEnumerable<int> PrimeFactors(int n)
+        {
+            int i = 2;
+            int tmp = n;
+
+            while (i * i <= n) //※1
+            {
+                if (tmp % i == 0)
+                {
+                    tmp /= i;
+                    yield return i;
+                }
+                else
+                {
+                    i++;
+                }
+            }
+            if (tmp != 1) yield return tmp;//最後の素数も返す
         }
     }
 }
