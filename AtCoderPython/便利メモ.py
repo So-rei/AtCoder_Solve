@@ -157,3 +157,18 @@ def calc(n,rest): #残り回数(N→0),残りsum(K-SumA(0-(n-1))
 sumall = calc(N,K) % MOD
 print(sumall)
 #----------------------------------------------------------------------------------------------------------------------
+
+#二分探索
+#数値配列A(ソート済)から、数値Nの位置(Ak<N<=Ak+1となるk)を探索する
+def searchdiv(cA,cN):
+    cst = 0
+    cfi = len(cA)- 1
+    while(cst<=cfi):
+        tmp = (cst+cfi) // 2
+        if (cA[tmp] < cN):
+            cst = tmp + 1
+        else:
+            cfi = tmp - 1
+
+    return cst-1
+
