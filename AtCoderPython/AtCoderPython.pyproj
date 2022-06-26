@@ -56,6 +56,9 @@
     <Compile Include="arc138_b.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="arc143_b.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="_SolveMain.py">
       <SubType>Code</SubType>
     </Compile>
