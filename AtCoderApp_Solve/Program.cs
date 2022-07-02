@@ -9,17 +9,22 @@ namespace AtCoderApp
     {
         static void Main(string[] args)
         {
-            new abc254_d();
+            new arc143_b();
         }
 
-        public class abc254_d
+        public class arc143_b
         {
-            public abc254_d()
+            public arc143_b()
             {
                 //input-------------
                 var N = In.Read<int>();
 
                 //output------------
+
+
+
+
+                return;
             }
         }
 
@@ -327,6 +332,119 @@ namespace AtCoderApp
                 }
             }
             if (tmp != 1) yield return tmp;//最後の素数も返す
+        }
+
+
+        /// <summary>
+        /// 2次元配列(LxW)について ※indexは0始まり,左下が0,0
+        /// スタート位置(i,j)からタテ・ヨコ・ナナメに行けるところまで移動する時を考える。
+        /// 移動可能座標全てをint[](fi,fj)形式で返す。
+        /// </summary>
+        /// <param name="i">現在位置i(タテ)</param>
+        /// <param name="j">現在位置j(ヨコ)</param>
+        /// <param name="L">最大サイズiL</param>
+        /// <param name="W">最大サイズjW</param>
+        /// <param name="X">進む方向。テンキー5の位置から見た値。1,2,3,4,6,7,8,9</param>
+        /// <returns>{fi,fj} のコレクション</returns>
+        public static IEnumerable<int[]> Dig2D(int i, int j, int L, int W, int X)
+        {
+            int ii = i;
+            int jj = j;
+            switch (X)
+            {
+                case 1://左下
+                    ii--;
+                    jj--;
+                    while (ii >= 0 && jj >= 0)
+                    {
+                        yield return new int[] { ii, jj };
+                        ii--;
+                        jj--;
+                    }
+                    break;
+                case 2:
+                    ii--;
+                    while (ii >= 0)
+                    {
+                        yield return new int[] { ii, jj };
+                        ii--;
+                    }
+                    break;
+                case 3:
+                    ii--;
+                    jj++;
+                    while (ii >= 0 && jj < W)
+                    {
+                        yield return new int[] { ii, jj };
+                        ii--;
+                        jj++;
+                    }
+                    break;
+                case 4:
+                    jj--;
+                    while (jj >= 0)
+                    {
+                        yield return new int[] { ii, jj };
+                        jj--;
+                    }
+                    break;
+                case 6:
+                    jj++;
+                    while (jj <= W)
+                    {
+                        yield return new int[] { ii, jj };
+                        jj++;
+                    }
+                    break;
+                case 7:
+                    ii++;
+                    jj--;
+                    while (ii < L && jj >= 0)
+                    {
+                        yield return new int[] { ii, jj };
+                        ii++;
+                        jj--;
+                    }
+                    break;
+                case 8:
+                    ii++;
+                    while (ii < L)
+                    {
+                        yield return new int[] { ii, jj };
+                        ii++;
+                    }
+                    break;
+                case 9:
+                    ii++;
+                    jj++;
+                    while (ii < L && jj < W)
+                    {
+                        yield return new int[] { ii, jj };
+                        ii++;
+                        jj++;
+                    }
+                    break;
+
+                default://ERR
+                    yield return null;
+                    break;
+            }
+        }
+
+        //Dig2Dの全方向版
+        public static Dictionary<int, IEnumerable<int[]>> DigAll(int i, int j, int L, int W)
+        {
+            Dictionary<int, IEnumerable<int[]>> Dic = new Dictionary<int, IEnumerable<int[]>>();
+            Dic.Add(1, Dig2D(i, j, L, W, 1));
+            Dic.Add(2, Dig2D(i, j, L, W, 2));
+            Dic.Add(3, Dig2D(i, j, L, W, 3));
+            Dic.Add(4, Dig2D(i, j, L, W, 4));
+            Dic.Add(6, Dig2D(i, j, L, W, 6));
+            Dic.Add(7, Dig2D(i, j, L, W, 7));
+            Dic.Add(8, Dig2D(i, j, L, W, 8));
+            Dic.Add(9, Dig2D(i, j, L, W, 9));
+
+            return Dic;
         }
     }
 }
