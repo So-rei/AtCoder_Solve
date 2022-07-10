@@ -35,7 +35,6 @@ namespace AtCoderApp
             (var a, var b, var d) = In.ReadTuple3<double>();
 
             //output------------
-            double ret = 0.000000D;
 
             double theta = a == 0 ? 0 : Math.Atan2(b, a); //a,bのθ(rad)
             double rad = theta + (d / 180 * Math.PI); //変化後の角度(rad)
@@ -91,7 +90,7 @@ namespace AtCoderApp
             //T判定
             int q = 0;
             int tmp_cnt = 1;//1文字目のぶん
-            
+
             //2文字目以降
             for (int i = 1; i < T.Count(); i++)
             {
@@ -201,7 +200,7 @@ namespace AtCoderApp
             Out.Write("Yes");
         }
     }
-    
+
     //時間切れ後に作成
     //AC32 / TLE16
     //DFSが遅い、、、？
@@ -280,6 +279,88 @@ namespace AtCoderApp
                     {
                         if (bEnd[i] == 1) return true;//ゴールと接していることを発見した
                         if (IsConnect(i, deep + 1)) return true;//子が接していることを発見した
+                    }
+                }
+                return false;
+            }
+        }
+    }
+
+
+    //DFSを解説をもとに書き換えたらAC
+    //isCheckedは偉大
+    public class abc259_d2
+    {
+        public abc259_d2()
+        {
+            //input-------------
+            var N = In.Read<int>();
+            (var sx, var sy, var tx, var ty) = In.ReadTuple4<int>();
+            var XYR = new List<(long x, long y, long r)>();
+            for (int i = 0; i < N; i++)
+                XYR.Add(In.ReadTuple3<long>());
+
+            //output------------
+            //スタートおよびゴールがどの円と接するか記憶
+            var bStart = GetHit(sx, sy);
+            var bEnd = GetHit(tx, ty);
+
+            //円tと円sが接するかどうか調べてその結果を記憶
+            var clossed = new int[N, N];
+            for (int i = 0; i < N; i++)
+            {
+                for (int j = i + 1; j < N; j++)
+                {
+                    //SQRTにすると計算誤差でうまくいかない可能性があるので、二乗のまま比較計算する
+
+                    long len = (XYR[i].x - XYR[j].x) * (XYR[i].x - XYR[j].x) + (XYR[i].y - XYR[j].y) * (XYR[i].y - XYR[j].y);
+                    long r = XYR[i].r + XYR[j].r;
+                    //最大：外接　～　最小：内接
+                    if (len <= r * r && (XYR[i].r - XYR[j].r) * (XYR[i].r - XYR[j].r) <= len)
+                    {
+                        clossed[i, j] = 1;
+                        clossed[j, i] = 1; //i→jもj→iも意味は同じなので、両方にセットしておく
+                    }
+                }
+            }
+
+            //DFS判別用関数
+            var isChecked = new bool[N];
+
+            for (int i = 0; i < N; i++)
+                if (bStart[i] == 1 && DFS(i)) //全てのスタートについて、ゴールとつながっているかどうか
+                {
+                    Out.Write("Yes");
+                    return;
+                }
+            //※isCheckedはループごとにリセットする必要がない
+
+            Out.Write("No");
+
+            //local-calc-----------------------------------------------
+            int[] GetHit(int x, int y)
+            {
+                int[] ret = new int[N];
+                for (int i = 0; i < N; i++)
+                {
+                    long len = (XYR[i].x - x) * (XYR[i].x - x) + (XYR[i].y - y) * (XYR[i].y - y);
+                    if (len == XYR[i].r * XYR[i].r)
+                        ret[i] = 1;
+                }
+                return ret;
+            }
+
+            bool DFS(int st)
+            {
+                isChecked[st] = true; //調査済
+                if (bEnd[st] == 1) return true;//自分が接している
+
+                for (int i = 0; i < N; i++)
+                {
+                    if (isChecked[i]) continue; //既に調査済みのときは飛ばす
+                    if (clossed[i, st] == 1)
+                    {
+                        if (DFS(i)) return true;//子が接していることを発見した
                     }
                 }
                 return false;
