@@ -319,7 +319,7 @@ namespace AtCoderApp
                     if (len <= r * r && (XYR[i].r - XYR[j].r) * (XYR[i].r - XYR[j].r) <= len)
                     {
                         clossed[i, j] = 1;
-                        clossed[j, i] = 1; //i→jもj→iも意味は同じなので、両方にセットしておく
+                        clossed[j, i] = 1; //今回は無向グラフであるので、i→jもj→iも両方にセットしておく
                     }
                 }
             }
@@ -365,6 +365,94 @@ namespace AtCoderApp
                 }
                 return false;
             }
+        }
+    }
+
+    //時間切れ後に作成
+    //inputめんどくさ!!
+    //特に解説見てないけどACになった。やったぜ。
+    public class abc259_e
+    {
+        public abc259_e()
+        {
+            //input-------------
+            var N = In.Read<int>();
+            var m = new int[N];
+            var pe = new List<(int p, int e)[]>();
+            for (int i = 0; i < N; i++)
+            {
+                m[i] = In.Read<int>();
+                var pp = new (int p, int e)[m[i]];
+                for (int j = 0; j < m[i]; j++)
+                    pp[j] = In.ReadTuple2<int>();
+                pe.Add(pp);
+            }
+
+            //output------------
+            //全てバラバラに重複しないpが入っている場合、答えは明らかにN
+            //a(i)のすべてのpj,ejについて、他のすべてのaのp,eの組み合わせ中にpj = pk かつ ej <= ekのものが存在する
+            //となるようなa(i)が複数存在する（以下、ai∈a他 と表記）　→　その重複の分だけ、最終結果が減る。(1個だけなら減らない)
+            //ex)2,3,5 →　全部バラバラ。解=3-0=3
+            //ex)6,9,4,20 → {6∈9と4}{4∈20} なので,6を消したときと4を消した時はどちらも同じ結果(=9と20の最小公倍数)となる。∴解は4-1=3
+            //これでいけるはず
+
+            //この探索を真面目に１個ずつ二重ループするとO(N*N/2)回判定やらないといけない....?これは多すぎ
+            //→aに関係なく全てのp,eを予めリスト化しておく。同じpが出たら最も大きい乗数eMaxをリストっとく。
+            //リストを作るのにO(N)
+            //a(i)がリスト条件の中で全て満たすか調べる。ただし、自分自身がそのリストのeMaxであるときは除外しないといけない。。
+            //除外のためには、あるpについて、ei=3,ej=4,ek=5... の場合、(i,3),(j,4),(k,5)...と全部リストに追加しておく？でもこれだと最大N件はいるので、除外処理が最悪O(N*N)になる？？
+            //→不要。eMaxとその次に大きいeを誰が作ったかだけリストしとけば良い。
+            //リスト確認O(2*N)ぐらいでできるはず
+
+            var memo = new Dictionary<int, (int index, int e)[]>(); //リスト Key=p, 中身はeMaxとその一つ小さいeの(index,e)
+                                                                    //リストを作る
+            for (int i = 0; i < N; i++)
+            {
+                for (int j = 0; j < m[i]; j++)
+                {
+                    if (memo.ContainsKey(pe[i][j].p))
+                    {
+                        if (memo[pe[i][j].p][0].e < pe[i][j].e)
+                        {
+                            //eMax>e次 と入るように順番swap
+                            memo[pe[i][j].p][1] = memo[pe[i][j].p][0];
+                            memo[pe[i][j].p][0] = (i, pe[i][j].e);
+                        }
+                        else if (memo[pe[i][j].p][1].e < pe[i][j].e)
+                        {
+                            memo[pe[i][j].p][1] = (i, pe[i][j].e);
+                        }
+                    }
+                    else
+                    {
+                        //まだないので追加
+                        var newary = new (int index, int e)[2];
+                        newary[0] = (i, pe[i][j].e);
+                        memo.Add(pe[i][j].p, newary);
+                    }
+                }
+            }
+
+            //リスト確認
+            int eraseCnt = 0;
+            for (int i = 0; i < N; i++)
+            {
+                bool canErase = true;
+
+                for (int j = 0; j < m[i]; j++)
+                {
+                    //自分が最高乗数eMaxの持ち主であり、除外するとeMaxを満たせなくなってしまう場合は重複する可能性がない
+                    if (memo[pe[i][j].p][0].index == i && memo[pe[i][j].p][1].e < memo[pe[i][j].p][0].e)
+                    {
+                        canErase = false;
+                        break;
+                    }
+                }
+
+                if (canErase) eraseCnt++;
+            }
+
+            Out.Write(eraseCnt < 2 ? N : N - (eraseCnt - 1));
         }
     }
 }
