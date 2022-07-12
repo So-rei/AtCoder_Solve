@@ -75,6 +75,8 @@ namespace AtCoderApp
         }
     }
 
+    //これではだめ
+    //1～Nの素数を全て取ろうとすることがそもそも遅すぎる。
     public class abc227_c
     {
         public abc227_c()
@@ -175,45 +177,45 @@ namespace AtCoderApp
     }
 
     //正解3,TLE5、残りはなんかコンパイルエラー？
-    //public class abc227_d
-    //{
-    //    public abc227_d()
-    //    {
-    //        //input-------------
-    //        var NK = In.ReadAry<int>().ToArray();
-    //        int N = NK[0];
-    //        int K = NK[1];
-    //        var A = In.ReadAry<int>().ToArray();
+    public class abc227_d
+    {
+        public abc227_d()
+        {
+            //input-------------
+            var NK = In.ReadAry<int>().ToArray();
+            int N = NK[0];
+            int K = NK[1];
+            var A = In.ReadAry<int>().ToArray();
 
-    //        //1≤K≤N≤2×105
-    //        //1≤Ai​≤1012
+            //1≤K≤N≤2×105
+            //1≤Ai​≤1012
 
-    //        //output------------
-    //        var Ax = A.OrderByDescending(t => t); //社員が多い場所から取っていく
-    //        IOrderedEnumerable<int> nextAx = null;
-    //        var cnt = 0;
-    //        while (true)
-    //        {
-    //            if (!SortAndDecrase(Ax, ref nextAx))
-    //                break;
+            //output------------
+            var Ax = A.OrderByDescending(t => t); //社員が多い場所から取っていく
+            IOrderedEnumerable<int> nextAx = null;
+            var cnt = 0;
+            while (true)
+            {
+                if (!SortAndDecrase(Ax, ref nextAx))
+                    break;
 
-    //            Ax = nextAx;
-    //            cnt++;
-    //        }
+                Ax = nextAx;
+                cnt++;
+            }
 
-    //        Out.Write(cnt);
+            Out.Write(cnt);
 
 
-    //        bool SortAndDecrase(IOrderedEnumerable<int> Ax, ref IOrderedEnumerable<int> nextAx)
-    //        {
-    //            nextAx = Ax.Select((p, index) =>
-    //            {
-    //                return p - (index < K ? 1 : 0);
-    //            }).OrderByDescending(t => t);
+            bool SortAndDecrase(IOrderedEnumerable<int> Ax, ref IOrderedEnumerable<int> nextAx)
+            {
+                nextAx = Ax.Select((p, index) =>
+                {
+                    return p - (index < K ? 1 : 0);
+                }).OrderByDescending(t => t);
 
-    //            return (!(nextAx.Last() < 0)); //引けない状態だったら終了
-    //        }
-    //    }
+                return (!(nextAx.Last() < 0)); //引けない状態だったら終了
+            }
+        }
 
-    //}
+    }
 }
