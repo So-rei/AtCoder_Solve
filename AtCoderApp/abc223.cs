@@ -4,13 +4,43 @@ using System.Linq;
 
 namespace AtCoderApp
 {
-    //class Program
-    //{
-    //    static void Main(string[] args)
-    //    {
-    //        new abc223_c();
-    //    }
-    //}
+
+    public class abc223_a
+    {
+        public abc223_a()
+        {
+            //input-------------
+            var X = In.Read<int>();
+
+            //calc----
+
+            Out.Write((X > 0 && X % 100 == 0) ? "Yes" : "No");
+        }
+    }
+    public class abc223_b
+    {
+        public abc223_b()
+        {
+            //input-------------
+            var S = In.Read<string>();
+
+            //calc----
+            var smin = S;
+            var smax = S;
+            var sminchar = S.ToArray().Min();
+            var smaxchar = S.ToArray().Max();
+            for (int x = 0; x < S.Length; x++)
+            {
+                if (S[x] == sminchar)
+                    smin = new string[] { smin, (S.Substring(x) + S.Substring(0, x)) }.OrderBy(q => q).First();
+                else if (S[x] == smaxchar)
+                    smax = new string[] { smax, (S.Substring(x) + S.Substring(0, x)) }.OrderBy(q => q).Last();
+            }
+
+            Out.Write(smin);
+            Out.Write(smax);
+        }
+    }
 
     public class abc223_c
     {
